@@ -11,7 +11,7 @@ import image_util
 import util
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description="Raspbetty Pi LED Matrix Slot Machine")
+    parser = argparse.ArgumentParser(description="Raspbetty Pi Smart LED Matrix Sign")
     parser.add_argument("--test-display", action="store_true", help="Test the display panel")
     parser.add_argument("--smart-sign", action="store_true", help="Run the smart sign web app")
     parser.add_argument("--num-panels", type=int, default=4, help="number of display panels")
@@ -52,7 +52,7 @@ def run_slot_machine(display):
     def handle_kick(request):
         if machine.state == State.IDLE:
             asyncio.create_task(machine.kick())
-            return web.json_response({'status': 'success', 'message': 'SlotMachine was kicked successfully'})
+            return web.json_response(status=200, data={'status': 'success', 'message': 'SlotMachine was kicked successfully'})
         else:
             return web.json_response({'status': 'success', 'message': 'SlotMachine is busy'})
 
