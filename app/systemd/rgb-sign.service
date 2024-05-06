@@ -4,7 +4,7 @@ Description=Raspberry Pi LED Matrix Sign
 [Service]
 User=root
 WorkingDirectory=/home/rpi/repos/pi-rgb-sign
-ExecStart=/bin/bash -c 'cd /home/rpi/repos/pi-rgb-sign && python app/src/app.py --connected-sign'
+ExecStart=/bin/bash -c 'cd /home/rpi/repos/pi-rgb-sign && python app/src/app.py --smart-sign'
 Restart=always
 RestartSec=10
 

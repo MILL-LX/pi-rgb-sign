@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "app/src/app.py",
             "console": "integratedTerminal",
-            "args": "--slot-machine",
+            "args": "--smart-sign",
             "sudo": true
         },        {
             "name": "[local] App - Smart Sign",
@@ -18,7 +18,7 @@
             "request": "launch",
             "program": "app/src/app.py",
             "console": "integratedTerminal",
-            "args": "--slot-machine",
+            "args": "--smart-sign",
             "sudo": false
         },
         {

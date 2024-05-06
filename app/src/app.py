@@ -13,7 +13,7 @@ import util
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Raspbetty Pi LED Matrix Slot Machine")
     parser.add_argument("--test-display", action="store_true", help="Test the display panel")
-    parser.add_argument("--slot-machine", action="store_true", help="Run the slot machine")
+    parser.add_argument("--smart-sign", action="store_true", help="Run the smart sign web app")
     parser.add_argument("--num-panels", type=int, default=4, help="number of display panels")
     return parser.parse_args()
 
@@ -72,7 +72,7 @@ def main():
 
     if args.test_display: 
         run_display_test(display)
-    elif args.slot_machine:
+    elif args.smart_sign:
         run_display_test(display, seconds=10, check_network=True)
         run_slot_machine(display)
     else:
