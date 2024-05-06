@@ -49,17 +49,21 @@ def run_display_test(display, seconds:int=0, check_network:bool=False):
 def run_slot_machine(display):
     machine = SlotMachine(display)
 
-    app = Flask(__name__)
-    @app.route('/kick', methods=['GET'])
-    def kick():
-        # TODO - consider async implementation
+    def handle_kick(request):
         if machine.state == State.IDLE:
-            machine.kick()
-            return 'SlotMachine was kicked successfully'
+            asyncio.create_task(machine.kick())
+            return web.json_response({'status': 'success', 'message': 'SlotMachine was kicked successfully'})
         else:
-            return 'SlotMachine is busy'
+            return web.json_response({'status': 'success', 'message': 'SlotMachine is busy'})
+
+
+
+    app = web.Application()
+    app.router.add_get('/kick', handle_kick)
+
+
         
-    app.run(host='0.0.0.0', port=80)
+    web.run_app(app, host='0.0.0.0', port=80)
 
 def main():
     args = parse_arguments()

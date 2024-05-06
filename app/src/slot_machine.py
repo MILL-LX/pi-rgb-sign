@@ -85,7 +85,7 @@ class SlotMachine:
 
         return display_images, emoji_quartets
 
-    def kick(self):
+    async def kick(self):
         self.state = State.RUNNING
         print(f'received kick signal')
 
