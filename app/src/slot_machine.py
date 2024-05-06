@@ -18,18 +18,18 @@ class SlotMachine:
         self.panel_width = display.width() // display.num_panels
         self.panel_height = display.height()
 
-        font_path = 'fonts/MILL/Canada Type - Screener SC.ttf'
+        font_path = 'assets/fonts/MILL/Canada Type - Screener SC.ttf'
         font_size = min(self.panel_width, self.panel_height)
         self.word_font = ImageFont.truetype(font_path, size=font_size)
 
-        font_path = 'fonts/Noto_Emoji/static/NotoEmoji-Regular.ttf'
+        font_path = 'assets/fonts/Noto_Emoji/static/NotoEmoji-Regular.ttf'
         font_size = min(self.panel_width * 0.8, self.panel_height)
         self.emoji_font = ImageFont.truetype(font_path, size=font_size)
 
-        self.words = util.load_words('./data/happy_words.txt')
+        self.words = util.load_words('data/slot-machine//happy_words.txt')
         self.display_images_for_words = self.make_display_images_for_words()
 
-        self.winning_words = util.load_words('data/winning_words.txt')
+        self.winning_words = util.load_words('data/slot-machine/winning_words.txt')
 
         self.display_images_for_emoji, self.emoji_quartets = self.make_display_images_for_emoji()
         

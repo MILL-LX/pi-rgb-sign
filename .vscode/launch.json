@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "App - Slot Machine",
+            "name": "App - Smart Sign",
             "type": "debugpy",
             "request": "launch",
             "program": "app/src/app.py",
@@ -13,7 +13,7 @@
             "args": "--slot-machine",
             "sudo": true
         },        {
-            "name": "[local] App - Slot Machine",
+            "name": "[local] App - Smart Sign",
             "type": "debugpy",
             "request": "launch",
             "program": "app/src/app.py",
