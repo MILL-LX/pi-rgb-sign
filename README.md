@@ -20,6 +20,10 @@ make build-python PYTHON=$(which python)
 sudo make install-python PYTHON=$(which python)
 ```
 
+## Installing the application as a Systemd Service
+
+Consult these instructions for starting this application when your Pi boots: [app/systemd/README.md](app/systemd/README.md)
+
 ## Running on your dev machine
 
 You can run this code on your development machine using the [RGBMatrixEmulator](https://github.com/ty-porter/RGBMatrixEmulator) library which allows you to develop the python animations using a simulated RGB LED Display. The application will attempt to use this library if it detects that it is not running on a Raspberry Pi.
