@@ -2,9 +2,6 @@ from PIL import Image, ImageDraw
 
 from display import Display
 
-##############################################################################################
-# Image Utility Functions
-##############################################################################################
 def test_image_for_panel(display: Display, fill_color: tuple[int, int, int]):
     panel_width = display.width() // display.num_panels
     panel_height = display.height()
@@ -17,7 +14,6 @@ def test_image_for_panel(display: Display, fill_color: tuple[int, int, int]):
 
 def test_images_for_display(display: Display):
     colors = [(255,0,0), (0,255,0),(0,0,255),(255,255,255)] # TODO - dynamically generate base on num_panels
-    # colors = [(255,0,0), (255,0,0), (255,0,0), (255,0,0)] # TODO - dynamically generate base on num_panels
     panel_images = [test_image_for_panel(display, colors[panel_number]) for panel_number in range(display.num_panels)]
     return panel_images
 

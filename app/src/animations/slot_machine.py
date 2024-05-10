@@ -1,18 +1,17 @@
-from enum import Enum
 import random
 import time
 
 from PIL import Image, ImageDraw, ImageFont
 
+from animations.base_animation import BaseAnimation
 from display import Display
-from emoji import emoji_list
-import image_util
-import util
+from util.emoji import emoji_list
+from util import image_util, words
 
-State = Enum('State', ['IDLE', 'RUNNING'])
-
-class SlotMachine:
+class SlotMachine(BaseAnimation):
     def __init__(self, display: Display) -> None:
+        super().__init__(display)
+
         print(f'Making a SlotMachine for a display with {display.num_panels} panels.')
         self.display = display
         self.panel_width = display.width() // display.num_panels
@@ -26,14 +25,12 @@ class SlotMachine:
         font_size = min(self.panel_width * 0.8, self.panel_height)
         self.emoji_font = ImageFont.truetype(font_path, size=font_size)
 
-        self.words = util.load_words('data/slot-machine//happy_words.txt')
+        self.words = words.load_words('data/slot-machine//happy_words.txt')
         self.display_images_for_words = self.make_display_images_for_words()
 
-        self.winning_words = util.load_words('data/slot-machine/winning_words.txt')
+        self.winning_words = words.load_words('data/slot-machine/winning_words.txt')
 
         self.display_images_for_emoji, self.emoji_quartets = self.make_display_images_for_emoji()
-        
-        self.state = State.IDLE
 
     def panel_image(self, character: str, font: ImageFont, text_color: tuple[int,int,int]):
         image = Image.new("RGB", (self.panel_width, self.panel_height))
@@ -85,10 +82,7 @@ class SlotMachine:
 
         return display_images, emoji_quartets
 
-    async def kick(self):
-        self.state = State.RUNNING
-        print(f'received kick signal')
-
+    async def run(self):
         self.display.clear()
 
         final_word_index = random.randint(0, len(self.words) - 1)
@@ -118,7 +112,3 @@ class SlotMachine:
                 time.sleep(flash_delay)
 
         self.display.setImage(final_display_image, x_offset=0, y_offset=0)
-                
-        print(f'cycle done')
-        self.state = State.IDLE
-

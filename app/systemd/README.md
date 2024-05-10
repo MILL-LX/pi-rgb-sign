@@ -2,7 +2,6 @@
 
 This application can start up automatically on reboot of your Raspberry Pi. Use the following commands to install the service, start the application, and enable it to start up on reboot:
 
-
 ```bash
 cd /home/rpi/repos/pi-rgb-sign
 sudo cp app/systemd/pi-rgb-sign.service /etc/systemd/system

@@ -1,8 +1,5 @@
 import subprocess
 
-##############################################################################################
-# Startup Functions
-##############################################################################################
 def is_raspberry_pi():
     try:
         with open('/sys/firmware/devicetree/base/model', 'r') as f:
@@ -26,12 +23,3 @@ def has_active_network_interface():
     except Exception as e:
         print("Error occurred while checking for active network interface:", e)
         return False
-
-##############################################################################################
-# Word List Utility Functions
-##############################################################################################
-def load_words(word_file_path):
-    with open(word_file_path, 'r') as word_file:
-        words = word_file.readlines()
-    word_list = [word.rstrip('\n').upper() for word in words if len(word) == 5]
-    return word_list

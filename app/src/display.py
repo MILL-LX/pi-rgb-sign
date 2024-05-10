@@ -1,11 +1,11 @@
-import util
+from PIL import Image
 
-if util.is_raspberry_pi():
+from util import pi_util
+
+if pi_util.is_raspberry_pi():
     from rgbmatrix import RGBMatrix, RGBMatrixOptions
 else:
     from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
-    
-from PIL import Image
 
 class Display:
     def __init__(self, num_panels: int, emulate=False) -> None:
