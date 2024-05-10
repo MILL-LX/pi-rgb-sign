@@ -1,6 +1,6 @@
 # Systemd Service Installation
 
-This application can be installed to start up automatically on reboot of your Raspberry Pi. Use the following commands to install th corresponding service, start the application, and enable it to start up on reboot:
+This application can start up automatically on reboot of your Raspberry Pi. Use the following commands to install the service, start the application, and enable it to start up on reboot:
 
 
 ```bash
