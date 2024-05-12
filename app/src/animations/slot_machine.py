@@ -82,7 +82,7 @@ class SlotMachine(BaseAnimation):
 
         return display_images, emoji_quartets
 
-    async def run(self, params):
+    async def run(self):
         self.display.clear()
 
         final_word_index = random.randint(0, len(self.words) - 1)

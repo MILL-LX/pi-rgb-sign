@@ -11,7 +11,7 @@ class Startup(BaseAnimation):
         self.animation_name = self.__class__
         self.display = display
 
-    def run(self, params=None, seconds:int=0, check_network:bool=False):
+    async def run(self, seconds:int=0, check_network:bool=False):
         panel_images = image_util.test_images_for_display(self.display) # TODO - replace with a call to generate panels for each animation frame      
 
         start_time = time.time()

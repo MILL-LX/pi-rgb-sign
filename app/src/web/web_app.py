@@ -35,7 +35,7 @@ class WebApp:
         if not animation_name:
             animation_name = request.match_info['animation']
         animation = self.animations[animation_name]
-        asyncio.create_task(animation.run(request.query))
+        asyncio.create_task(animation.run(**request.query))
         return web.json_response(status=200, data={'status': 'success', 'message': f'Animation {animation_name} queued successfully'})
         
     def add_routes(self):
