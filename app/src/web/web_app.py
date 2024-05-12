@@ -11,7 +11,21 @@ class WebApp:
         self.add_routes()
 
     async def index(self, request):
-        return web.Response(text='Hello, world!')
+        something = "abc"
+        response =f"""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>A simple webpage</title>
+</head>
+<body>
+  <h1>Simple HTML webpage</h1>
+  <p>Hello, world! {something} </p>
+</body>
+</html>
+"""
+        return web.Response(text=response, content_type='text/html')
     
     # TODO: Remove this when the client has been updated to use the animate endpoint
     async def legacy_trigger(self, request):
@@ -21,7 +35,7 @@ class WebApp:
         if not animation_name:
             animation_name = request.match_info['animation']
         animation = self.animations[animation_name]
-        asyncio.create_task(animation.run())
+        asyncio.create_task(animation.run(request.query))
         return web.json_response(status=200, data={'status': 'success', 'message': f'Animation {animation_name} queued successfully'})
         
     def add_routes(self):
