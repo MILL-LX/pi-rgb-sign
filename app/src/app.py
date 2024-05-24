@@ -8,7 +8,7 @@ program_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(program_dir)
 
 from display import Display
-from util import animation_util
+from animations import util
 from web.web_app import WebApp
 
 
@@ -24,7 +24,7 @@ def main():
 
     display = Display(args.num_panels)
     animation_dir = os.path.join(program_dir, 'animations')
-    animations = animation_util.register_animations(animation_dir, display)
+    animations = util.register_animations(animation_dir, display)
 
     startup_animation = animations['Startup']
 
