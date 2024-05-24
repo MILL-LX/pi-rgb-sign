@@ -30,10 +30,13 @@ class Startup(BaseAnimation):
             # We stop if we are checking for a network connection and we have one.
             # Otherwise, we respect the time limit and stop if the specified seconds have elapsed.
             if check_network and pi_util.has_active_network_interface():
-                logger.info('Network found, or not checked when not on a Pi')
+                logger.info('Stopping becasue network found, or not checked when not on a Pi')
                 return
             elif seconds > 0:
                 elapsed = time.time() - start_time
                 if elapsed > seconds:
-                    logger.info('Animation stopping after {elapsed} of {seconds} seconds.')
+                    if check_network:
+                        logger.error(f'Failed to find an active network interface in the {seconds} seconds allotted.')
+                    else:
+                        logger.info('Stopping after {elapsed} of {seconds} seconds.')
                     return
