@@ -13,7 +13,7 @@ class Startup(BaseAnimation):
         self.animation_name = self.__class__
         self.display = display
 
-    async def run(self, seconds:int=0, check_network:bool=False):
+    async def run(self, seconds:int=0, check_network:bool=False, **kwargs):
         panel_images = image_util.test_images_for_display(self.display) # TODO - replace with a call to generate panels for each animation frame      
 
 

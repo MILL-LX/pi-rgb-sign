@@ -1,4 +1,5 @@
 import importlib.util
+import inspect
 import logging
 import os
 
@@ -20,3 +21,15 @@ def register_animations(animation_dir, display):
                     animations[name] = obj(display)
     logger.info(f'Registered animations: {", ".join(animations.keys())}')
     return animations
+
+def describe_animation(animation ):
+    class_type = type(animation)
+    method_name = 'run'
+    method = getattr(animation, 'run', None)
+    if not method:
+        raise(ValueError(f'Method "{method_name}" not found in {class_type.__name__}.'))
+    
+    # Get the signature of the method
+    signature = inspect.signature(method)
+    return f'{method_name}{signature}'
+

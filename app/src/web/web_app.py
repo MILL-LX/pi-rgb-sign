@@ -1,7 +1,8 @@
 import asyncio
-import inspect
 
 from aiohttp import web
+
+from animations.util import describe_animation
 
 class WebApp:
     def __init__(self, animations, host='0.0.0.0', port=80) -> None:
@@ -12,21 +13,26 @@ class WebApp:
         self.app = web.Application()
         self.add_routes()
 
-    def descriptions_for_animations(self):
-        return {name for name, animation in self.animations.items()}
+    def descriptions_for_animations(self, url_prefix):
+        # endpoint_signatures = [describe_animation(animation) for animation in self.animations]
+        urls = [f'{url_prefix}/animate/{animation.__class__.__name__}?arguments' for animation in self.animations.values()]
+        descriptions = ''
+        for url in urls:
+            descriptions += f'\n<br><a href="{url}">{url}</a>'
+        return descriptions
 
-    async def index(self, request):
-        
+    async def index(self, request:web.Request):
+        url_prefix = f'{request.scheme}://{request.host}'
         response =f'''
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>A simple webpage</title>
+  <title>Available Endpoints</title>
 </head>
 <body>
-  <h1>Simple HTML webpage</h1>
-  <p>{self.descriptions_for_animations()}</p>
+  <h1>Available Endpoints</h1>
+  <p>{self.descriptions_for_animations(url_prefix)}</p>
 </body>
 </html>
 '''
