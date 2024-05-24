@@ -1,4 +1,5 @@
 import argparse
+import asyncio
 import os
 import sys
 
@@ -30,7 +31,7 @@ def main():
     if args.test_display: 
         startup_animation.run()
     elif args.smart_sign:
-        startup_animation.run(seconds=10, check_network=True)
+        asyncio.run(startup_animation.run(seconds=10, check_network=True))
         web_app = WebApp(animations)
         web_app.run()
     else:

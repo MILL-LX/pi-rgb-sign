@@ -1,4 +1,3 @@
-import sys
 import time
 
 from animations.base_animation import BaseAnimation
