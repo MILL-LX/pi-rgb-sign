@@ -1,7 +1,21 @@
 import argparse
 import asyncio
+import logging
 import os
 import sys
+
+# configure logging for the app
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(name)s - %(message)s',
+    handlers=[
+        logging.FileHandler("logs/app.log"),
+        logging.StreamHandler()  # Log to the console
+    ]
+)
+
+# Get our logger
+logger = logging.getLogger(__name__)
 
 # Look for modules and packages in our application directory
 program_dir = os.path.dirname(os.path.abspath(__file__))
@@ -35,8 +49,8 @@ def main():
         web_app = WebApp(animations)
         web_app.run()
     else:
-        print(f'KThXBye')
+        logger.error('No application mode specified, exiting... KThXBye')
 
 if __name__ == "__main__":
-    print(f'Starting Raspberry Pi Smart LED Matrix Sign')
+    logger.info(f'Starting Raspberry Pi Smart LED Matrix Sign')
     main()

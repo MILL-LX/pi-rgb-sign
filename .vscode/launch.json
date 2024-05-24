@@ -5,6 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "App - Unspecified Mode",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "app/src/app.py",
+            "console": "integratedTerminal",
+            "sudo": true
+        },
+        {
             "name": "App - Smart Sign",
             "type": "debugpy",
             "request": "launch",

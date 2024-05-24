@@ -1,13 +1,18 @@
+import logging
 import subprocess
+
+logger = logging.getLogger(__name__)
 
 def is_raspberry_pi():
     try:
         with open('/sys/firmware/devicetree/base/model', 'r') as f:
             model = f.read()
             if 'Raspberry Pi' in model:
+                logger.info(f'We are running on a Raspbery Pi {model}')
                 return True
     except FileNotFoundError:
         pass
+
     return False
 
 def has_active_network_interface():
@@ -21,5 +26,5 @@ def has_active_network_interface():
         # Check if the command succeeded and if there's any network interface listed
         return result.returncode == 0 and len(result.stdout.strip()) > 0
     except Exception as e:
-        print("Error occurred while checking for active network interface:", e)
+        logger.error(f'Error checking for active network interface: {e}')
         return False

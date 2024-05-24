@@ -1,3 +1,4 @@
+import logging
 import random
 import time
 
@@ -8,11 +9,13 @@ from display import Display
 from util.emoji import emoji_list
 from util import image_util, words
 
+logger = logging.getLogger(__name__)
+
 class SlotMachine(BaseAnimation):
     def __init__(self, display: Display) -> None:
         super().__init__(display)
 
-        print(f'Making a SlotMachine for a display with {display.num_panels} panels.')
+        logger.info(f'Making a SlotMachine for a display with {display.num_panels} panels.')
         self.display = display
         self.panel_width = display.width() // display.num_panels
         self.panel_height = display.height()
