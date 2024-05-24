@@ -1,9 +1,13 @@
 import importlib.util
+import logging
 import os
 
 from animations.base_animation import BaseAnimation
 
+logger = logging.getLogger(__name__)
+
 def register_animations(animation_dir, display):
+    logger.info('Registering animations...')
     animations = {}
     for file_name in os.listdir(animation_dir):
         if file_name.endswith('.py'):
@@ -14,4 +18,5 @@ def register_animations(animation_dir, display):
             for name, obj in module.__dict__.items():
                 if isinstance(obj, type) and issubclass(obj, BaseAnimation) and obj is not BaseAnimation:
                     animations[name] = obj(display)
+    logger.info(f'Registered animations: {", ".join(animations.keys())}')
     return animations
