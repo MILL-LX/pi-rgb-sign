@@ -64,7 +64,7 @@ class ShowMessage(BaseAnimation):
         final_display_image = display_images[-1]
         for display_image in display_images:
             self.display.setImage(display_image, x_offset=0, y_offset=0)
-            time.sleep(0.1)
+            time.sleep(0.5)
 
         flash_delay = 0.08
         time.sleep(flash_delay)
