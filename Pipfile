@@ -8,6 +8,7 @@ pillow = "*"
 brotli = "*"
 aiohttp = "*"
 aiodns = "*"
+uniseg = "*"
 
 [dev-packages]
 rgbmatrixemulator = "*"
