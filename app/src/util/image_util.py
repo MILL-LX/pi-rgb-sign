@@ -28,8 +28,13 @@ def display_image_from_panel_images(panel_images):
     display_image = Image.new("RGB", (num_panels * panel_width, panel_height))
 
     current_x = 0
+
     for panel_image in panel_images:
-        display_image.paste(panel_image, (current_x, 0))
+        # All panel are scaled to the panel width, but some may need to be adjusted for height
+        image_width, image_height = panel_image.size
+        y = (panel_height - image_height) // 2
+
+        display_image.paste(panel_image, (current_x, y))
         current_x += panel_width
 
     return display_image

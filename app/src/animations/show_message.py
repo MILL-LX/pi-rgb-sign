@@ -11,9 +11,9 @@ from util import image_util
 
 logger = logging.getLogger(__name__)
 
+# TODO - move to class members
 EMOJI_GLYPHS_PATH = 'assets/emoji_glyphs/32x32'
 FONT_PATH = 'assets/fonts/MILL/Canada Type - Screener SC.ttf'
-
 
 def grapheme_to_hex(grapheme: str) -> str:
     hex_codes = [hex(ord(c)).replace('0x', '') for c in grapheme]
