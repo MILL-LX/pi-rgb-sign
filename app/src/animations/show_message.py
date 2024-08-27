@@ -32,12 +32,12 @@ class ShowMessage(BaseAnimation):
         finish_image = self.display_image_generator.make_panel_image_for_message(finish)
         display_image_width, display_image_height = display_image.size
 
-        for rotations in range(3):
+        for repetitions in range(1):
             x = self.display.width()
             while x > -display_image_width + self.display.width(): 
                 x -= self.display.panel_width() // 8
                 self.display.setImage(display_image, x_offset=x, y_offset=0)
-                time.sleep(0.1)
+                time.sleep(0.05)
 
 
         flash_delay = 0.08
