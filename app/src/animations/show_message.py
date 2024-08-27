@@ -1,5 +1,4 @@
 import logging
-import random
 import time
 
 from animations.base_animation import BaseAnimation
