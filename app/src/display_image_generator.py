@@ -39,7 +39,8 @@ class DisplayImageGenerator:
             g = random.randint(0,255)
             b = random.randint(0,255)
             text_color = (r,g,b)
-            image =  None if grapheme == ' ' else self._draw_panel_image(grapheme, self.font, text_color)
+            # image =  None if grapheme == ' ' else self._draw_panel_image(grapheme, self.font, text_color)
+            image = self._draw_panel_image(grapheme, self.font, text_color)
 
         return image
 
