@@ -37,8 +37,14 @@ class Display:
     def width(self):
         return self.matrix.width
     
+    def panel_width(self):
+        return self.width() // self.num_panels
+    
     def height(self):
         return self.matrix.height
+    
+    def panel_height(self):
+        return self.height()
 
     def setImage(self, image: Image.Image, x_offset=0, y_offset=0):
         self.matrix.Clear() 
