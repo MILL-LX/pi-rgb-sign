@@ -28,7 +28,7 @@ class DisplayImageGenerator:
         font_size = min(self.display.panel_width(), self.display.panel_height())
         self.font = ImageFont.truetype(font_path, size=font_size)
 
-    def _make_grapheme_panel_image(self, grapheme: str) -> Image:
+    def _make_grapheme_panel_image(self, grapheme: str, always_draw_emoji: bool=False) -> Image:
         image_file = _image_filepath_for_grapheme(grapheme)
 
         try: 
@@ -39,7 +39,7 @@ class DisplayImageGenerator:
             g = random.randint(0,255)
             b = random.randint(0,255)
             text_color = (r,g,b)
-            # image =  None if grapheme == ' ' else self._draw_panel_image(grapheme, self.font, text_color)
+
             image = self._draw_panel_image(grapheme, self.font, text_color)
 
         return image
@@ -90,8 +90,8 @@ class DisplayImageGenerator:
         return display_image
 
 
-    def make_panel_image_for_message(self, message):
-        panel_images = [self._make_grapheme_panel_image(g) for g in message]
+    def make_panel_image_for_message(self, message: str, always_draw_emoji: bool=False):
+        panel_images = [self._make_grapheme_panel_image(g, always_draw_emoji) for g in message]
         display_image = self._display_image_from_panel_images(panel_images)
 
         return display_image

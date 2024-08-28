@@ -2,106 +2,68 @@ import logging
 import random
 import time
 
-from PIL import Image, ImageDraw, ImageFont
-
 from animations.base_animation import BaseAnimation
 from display import Display
-from util.emoji import emoji_list
-from util import image_util, words
+from display_image_generator import DisplayImageGenerator
+import util.emoji
+import util.words
+
 
 logger = logging.getLogger(__name__)
 
+
+##############################################################
+# Configuration Constants
+##############################################################
+_FONT_PATH = 'assets/fonts/MILL/Canada Type - Screener SC.ttf'
+_HAPPY_WORDS_PATH = 'data/slot-machine/happy_words.txt'
+_WINNING_WORDS_PATH = 'data/slot-machine/winning_words.txt'
+
 class SlotMachine(BaseAnimation):
-    def __init__(self, display: Display) -> None:
+    def __init__(self, display: Display, font_path=_FONT_PATH) -> None:
         super().__init__(display)
 
-        self.panel_width = self.display.width() // self.display.num_panels
-        self.panel_height = self.display.height()
+        self.font_path = font_path
+        self.display_image_generator = DisplayImageGenerator(self.display, self.font_path)
 
-        font_path = 'assets/fonts/MILL/Canada Type - Screener SC.ttf'
-        font_size = min(self.panel_width, self.panel_height)
-        self.word_font = ImageFont.truetype(font_path, size=font_size)
+        self.words = util.words.load_words(_HAPPY_WORDS_PATH)
+        self.display_images_for_words = self.make_display_images_for_words(self.words)
 
-        font_path = 'assets/fonts/Noto_Emoji/static/NotoEmoji-Regular.ttf'
-        font_size = min(self.panel_width * 0.8, self.panel_height)
-        self.emoji_font = ImageFont.truetype(font_path, size=font_size)
+        self.winning_words = util.words.load_words(_WINNING_WORDS_PATH)
 
-        self.words = words.load_words('data/slot-machine//happy_words.txt')
-        self.display_images_for_words = self.make_display_images_for_words()
-
-        self.winning_words = words.load_words('data/slot-machine/winning_words.txt')
-
-        self.display_images_for_emoji, self.emoji_quartets = self.make_display_images_for_emoji()
-
-    def panel_image(self, character: str, font: ImageFont, text_color: tuple[int,int,int]):
-        image = Image.new("RGB", (self.panel_width, self.panel_height))
-        draw = ImageDraw.Draw(image)
-    
-        text_width = draw.textlength(character, font=font)
-
-        text_bbox = draw.textbbox((0, 0), character, font=font)
-        text_width = text_bbox[2] - text_bbox[0]
-        text_height = text_bbox[3] - text_bbox[1]
-
-
-        x = (self.panel_width - text_width) // 2
-        y = (self.panel_height - text_height) // 2
-    
-        draw.text((x, y), character, fill=text_color, font=font)
-
-        return image
-
-    def make_display_images_for_words(self):
-        words = self.words[:]
-        random.shuffle(words)
-
+    def make_display_images_for_words(self, words: list[str]):
         display_images = {}
         for word in words:
-            r = random.randint(0,255)
-            g = random.randint(0,255)
-            b = random.randint(0,255)
-            panel_images = [self.panel_image(c, self.word_font, (r,g,b)) for c in word]
             if not display_images.get(word):
-                display_images[word] = image_util.display_image_from_panel_images(panel_images)
+                panel_image = self.display_image_generator.make_panel_image_for_message(word)
+                display_images[word] = panel_image
 
         return display_images
-    
-    def make_display_images_for_emoji(self):
-        words_to_emoji_ratio = len(self.words) // (len(emoji_list) // self.display.num_panels)
-        shuffled_emoji = emoji_list[:] * words_to_emoji_ratio
-        random.shuffle(shuffled_emoji)
-        emoji_quartets = [''.join(shuffled_emoji[i:i+4]) for i in range(0, len(shuffled_emoji), self.display.num_panels)]
 
-        display_images = {}
-        for quartet in emoji_quartets:
-            r = random.randint(0,255)
-            g = random.randint(0,255)
-            b = random.randint(0,255)
-            panel_images = [self.panel_image(c, self.emoji_font, (r,g,b)) for c in quartet]
-            if not display_images.get(quartet):
-                display_images[quartet] = image_util.display_image_from_panel_images(panel_images)
-
-        return display_images, emoji_quartets
-
-    async def run(self, **kwargs):
+    async def run(self, iterations: int=20, **kwargs):
         self.display.clear()
 
-        final_word_index = random.randint(0, len(self.words) - 1)
-        final_word = self.words[final_word_index]
-        final_display_image = self.display_images_for_words[final_word]
+        iterations = int(iterations)
 
-        display_images = list(self.display_images_for_words.values())
-        display_images.extend(self.display_images_for_emoji.values())
-        random.shuffle(display_images)
+        num_emoji_quartets = iterations // 2
+        num_words_for_turn = iterations - num_emoji_quartets
 
-        iterations = min(100, len(self.display_images_for_words))
-        for display_image in display_images[:iterations]:
+        turn_words = random.sample(self.words, num_words_for_turn)
+        final_word = turn_words[-1]
+
+        emoji_quartets = util.emoji.make_random_quartets(num_emoji_quartets)
+        turn_words.extend(emoji_quartets)    
+
+        random.shuffle(turn_words)
+
+        turn_display_images = self.make_display_images_for_words(turn_words)
+        final_display_image = turn_display_images[final_word]
+        
+        for display_image in turn_display_images.values():
             self.display.setImage(display_image, x_offset=0, y_offset=0)
             time.sleep(0.1)
-        self.display.setImage(final_display_image, x_offset=0, y_offset=0)
 
-        # DEBUG - test by always adding the current word to the winning word list
-        # self.winning_words.append(final_word)
+        self.display.setImage(final_display_image, x_offset=0, y_offset=0)
 
         flash_delay = 0.08
         if final_word in self.winning_words:
@@ -112,4 +74,3 @@ class SlotMachine(BaseAnimation):
                 self.display.setImage(final_display_image, x_offset=0, y_offset=0)
                 time.sleep(flash_delay)
 
-        self.display.setImage(final_display_image, x_offset=0, y_offset=0)
