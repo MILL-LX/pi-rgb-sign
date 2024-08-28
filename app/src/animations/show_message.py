@@ -10,14 +10,16 @@ logger = logging.getLogger(__name__)
 ##############################################################
 # Configuration Constants
 ##############################################################
-_FONT_PATH = 'assets/fonts/MILL/Canada Type - Screener SC.ttf'
+_WORD_FONT_PATH = 'assets/fonts/MILL/Canada Type - Screener SC.ttf'
+_EMOJI_FONT_PATH = 'assets/fonts/Noto_Emoji/static/NotoEmoji-Medium.ttf'
 
 class ShowMessage(BaseAnimation):
-    def __init__(self, display: Display, font_path=_FONT_PATH) -> None:
+    def __init__(self, display: Display, word_font_path=_WORD_FONT_PATH, emoji_font_path=_EMOJI_FONT_PATH) -> None:
         super().__init__(display)
 
-        self.font_path = font_path
-        self.display_image_generator = DisplayImageGenerator(self.display, self.font_path)
+        self.word_font_path = word_font_path
+        self.emoji_font_path = emoji_font_path
+        self.display_image_generator = DisplayImageGenerator(self.display, self.word_font_path, self.emoji_font_path)
 
     
     async def run(self, message, finish=None, **kwargs):

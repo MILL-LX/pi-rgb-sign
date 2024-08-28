@@ -4,6 +4,7 @@ from PIL import Image, ImageDraw, ImageFont
 from uniseg.graphemecluster import grapheme_clusters
 
 from display import Display
+import util.emoji
 
 ##############################################################
 # Configuration Constants
@@ -22,25 +23,32 @@ def _image_filepath_for_grapheme(grapheme: str) -> str:
     return f'{EMOJI_GLYPHS_PATH}/{hex_code}.png'
 
 class DisplayImageGenerator:
-    def __init__(self, display: Display, font_path: str) -> None:
+    def __init__(self, display: Display, word_font_path: str, emoji_font_path: str) -> None:
         self.display = display
 
         font_size = min(self.display.panel_width(), self.display.panel_height())
-        self.font = ImageFont.truetype(font_path, size=font_size)
+        self.word_font = ImageFont.truetype(word_font_path, size=font_size)
+        self.emoji_font = ImageFont.truetype(emoji_font_path, size=font_size)
 
-    def _make_grapheme_panel_image(self, grapheme: str, always_draw_emoji: bool=False) -> Image:
-        image_file = _image_filepath_for_grapheme(grapheme)
+    def _make_grapheme_panel_image(self, grapheme: str, always_draw_emoji: bool=False, text_color: tuple[int,int,int]=None) -> Image:
+        image = None
+        if not always_draw_emoji:
+            try: 
+                image_file = _image_filepath_for_grapheme(grapheme)
+                image = Image.open(image_file)
+                image = image.convert('RGB')
+            except FileNotFoundError as e:
+                image = None
 
-        try: 
-            image = Image.open(image_file)
-            image = image.convert('RGB')
-        except FileNotFoundError as e:
-            r = random.randint(0,255)
-            g = random.randint(0,255)
-            b = random.randint(0,255)
-            text_color = (r,g,b)
+        if not image:
+            if not text_color:
+                r = random.randint(0,255)
+                g = random.randint(0,255)
+                b = random.randint(0,255)
+                text_color = (r,g,b)
 
-            image = self._draw_panel_image(grapheme, self.font, text_color)
+            grapheme_font = self.emoji_font if util.emoji.is_emoji(grapheme) else self.word_font
+            image = self._draw_panel_image(grapheme, grapheme_font, text_color)
 
         return image
 
