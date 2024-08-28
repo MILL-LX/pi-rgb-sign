@@ -15,10 +15,8 @@ class SlotMachine(BaseAnimation):
     def __init__(self, display: Display) -> None:
         super().__init__(display)
 
-        logger.info(f'Making a SlotMachine for a display with {display.num_panels} panels.')
-        self.display = display
-        self.panel_width = display.width() // display.num_panels
-        self.panel_height = display.height()
+        self.panel_width = self.display.width() // self.display.num_panels
+        self.panel_height = self.display.height()
 
         font_path = 'assets/fonts/MILL/Canada Type - Screener SC.ttf'
         font_size = min(self.panel_width, self.panel_height)

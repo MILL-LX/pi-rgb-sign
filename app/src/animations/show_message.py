@@ -16,10 +16,7 @@ class ShowMessage(BaseAnimation):
     def __init__(self, display: Display, font_path=_FONT_PATH) -> None:
         super().__init__(display)
 
-        logger.info(f'Making a ShowMessage animation for a display with {display.num_panels} panels.')
-        self.display = display
         self.font_path = font_path
-
         self.display_image_generator = DisplayImageGenerator(self.display, self.font_path)
 
     

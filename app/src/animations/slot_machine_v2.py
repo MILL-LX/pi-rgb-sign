@@ -5,7 +5,8 @@ import time
 from animations.base_animation import BaseAnimation
 from display import Display
 from display_image_generator import DisplayImageGenerator
-from util import emoji, words
+import util.emoji
+import util.words
 
 logger = logging.getLogger(__name__)
 
@@ -14,34 +15,22 @@ logger = logging.getLogger(__name__)
 # Configuration Constants
 ##############################################################
 _FONT_PATH = 'assets/fonts/MILL/Canada Type - Screener SC.ttf'
+_HAPPY_WORDS_PATH = 'data/slot-machine/happy_words.txt'
+_WINNING_WORDS_PATH = 'data/slot-machine/winning_words.txt'
 
 class SlotMachineV2(BaseAnimation):
     def __init__(self, display: Display, font_path=_FONT_PATH) -> None:
         super().__init__(display)
 
-        logger.info(f'Making a SlotMachineV2 for a display with {display.num_panels} panels.')
-        self.display = display
         self.font_path = font_path
-
         self.display_image_generator = DisplayImageGenerator(self.display, self.font_path)
 
-        self.words = words.load_words('data/slot-machine//happy_words.txt')
-        self.display_images_for_words = self.make_display_images_for_words()
+        self.words = util.words.load_words(_HAPPY_WORDS_PATH)
+        self.display_images_for_words = self.make_display_images_for_words(self.words)
 
-        self.winning_words = words.load_words('data/slot-machine/winning_words.txt')
+        self.winning_words = util.words.load_words(_WINNING_WORDS_PATH)
 
-    def make_display_images_for_words(self):
-        words = self.words[:]
-
-        words_to_emoji_ratio = len(self.words) // (len(emoji.emoji_list) // self.display.num_panels)
-        shuffled_emoji = emoji.emoji_list[:] * words_to_emoji_ratio
-        random.shuffle(shuffled_emoji)
-        emoji_quartets = [''.join(shuffled_emoji[i:i+4]) for i in range(0, len(shuffled_emoji), self.display.num_panels)]
-
-        words.extend(emoji_quartets)
-
-        random.shuffle(words)
-
+    def make_display_images_for_words(self, words: list[str]):
         display_images = {}
         for word in words:
             if not display_images.get(word):
@@ -50,24 +39,30 @@ class SlotMachineV2(BaseAnimation):
 
         return display_images
 
-    async def run(self, **kwargs):
+    async def run(self, iterations: int=20, **kwargs):
         self.display.clear()
 
-        final_word_index = random.randint(0, len(self.words) - 1)
-        final_word = self.words[final_word_index]
-        final_display_image = self.display_images_for_words[final_word]
+        iterations = int(iterations)
 
-        display_images = list(self.display_images_for_words.values())
-        random.shuffle(display_images)
+        num_emoji_quartets = iterations // 2
+        num_words_for_turn = iterations - num_emoji_quartets
 
-        iterations = min(100, len(self.display_images_for_words))
-        for display_image in display_images[:iterations]:
+        turn_words = random.sample(self.words, num_words_for_turn)
+        final_word = turn_words[-1]
+
+        emoji_quartets = util.emoji.make_random_quartets(num_emoji_quartets)
+        turn_words.extend(emoji_quartets)    
+
+        random.shuffle(turn_words)
+
+        turn_display_images = self.make_display_images_for_words(turn_words)
+        final_display_image = turn_display_images[final_word]
+        
+        for display_image in turn_display_images.values():
             self.display.setImage(display_image, x_offset=0, y_offset=0)
             time.sleep(0.1)
-        self.display.setImage(final_display_image, x_offset=0, y_offset=0)
 
-        # DEBUG - test by always adding the current word to the winning word list
-        # self.winning_words.append(final_word)
+        self.display.setImage(final_display_image, x_offset=0, y_offset=0)
 
         flash_delay = 0.08
         if final_word in self.winning_words:
@@ -78,4 +73,3 @@ class SlotMachineV2(BaseAnimation):
                 self.display.setImage(final_display_image, x_offset=0, y_offset=0)
                 time.sleep(flash_delay)
 
-        self.display.setImage(final_display_image, x_offset=0, y_offset=0)

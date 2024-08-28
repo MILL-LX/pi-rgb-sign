@@ -10,8 +10,6 @@ logger =  logging.getLogger(__name__)
 class Startup(BaseAnimation):
     def __init__(self, display) -> None:
         super().__init__(display)
-        self.animation_name = self.__class__
-        self.display = display
 
     async def run(self, seconds:int=0, check_network:bool=False, **kwargs):
         panel_images = image_util.test_images_for_display(self.display) # TODO - replace with a call to generate panels for each animation frame      
@@ -30,7 +28,7 @@ class Startup(BaseAnimation):
             # We stop if we are checking for a network connection and we have one.
             # Otherwise, we respect the time limit and stop if the specified seconds have elapsed.
             if check_network and pi_util.has_active_network_interface():
-                logger.info('Stopping becasue network found, or not checked when not on a Pi')
+                logger.info('Stopping because network found, or not checked when not on a Pi')
                 return
             elif seconds > 0:
                 elapsed = time.time() - start_time
