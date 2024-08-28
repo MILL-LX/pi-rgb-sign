@@ -31,18 +31,19 @@ class SlotMachine(BaseAnimation):
 
         self.winning_words = util.words.load_words(_WINNING_WORDS_PATH)
 
-    def make_display_images_for_words(self, words: list[str]):
+    def make_display_images_for_words(self, words: list[str], always_draw_emoji: bool=False):
         display_images = {}
         for word in words:
             if not display_images.get(word):
-                panel_image = self.display_image_generator.make_panel_image_for_message(word)
+                panel_image = self.display_image_generator.make_panel_image_for_message(word, always_draw_emoji)
                 display_images[word] = panel_image
 
         return display_images
 
-    async def run(self, iterations: int=20, **kwargs):
+    async def run(self, iterations: int=20, always_draw_emoji: bool=False, **kwargs):
         self.display.clear()
 
+        always_draw_emoji = 'true' == always_draw_emoji
         iterations = int(iterations)
 
         num_emoji_quartets = iterations // 2
@@ -56,7 +57,7 @@ class SlotMachine(BaseAnimation):
 
         random.shuffle(turn_words)
 
-        turn_display_images = self.make_display_images_for_words(turn_words)
+        turn_display_images = self.make_display_images_for_words(turn_words, always_draw_emoji)
         final_display_image = turn_display_images[final_word]
         
         for display_image in turn_display_images.values():
