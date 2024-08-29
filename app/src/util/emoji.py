@@ -1,8 +1,9 @@
 import os
 import random
 
+_EMOJI_GLYPH_DIR = 'assets/emoji_glyphs/32x32'
 
-def _load_emoji_list(emoji_glyph_dir: str = 'assets/emoji_glyphs/32x32'):
+def _load_emoji_list(emoji_glyph_dir: str = _EMOJI_GLYPH_DIR):
     emoji_list = []
     for filename in os.listdir(emoji_glyph_dir):
         if filename.endswith('.png'):
