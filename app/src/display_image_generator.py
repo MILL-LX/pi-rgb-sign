@@ -52,21 +52,22 @@ class DisplayImageGenerator:
                 b = random.randint(0,255)
                 text_color = (r,g,b)
 
-            grapheme_font = self.emoji_font if util.emoji.is_emoji(grapheme) else self.word_font
+            grapheme_is_emoji = util.emoji.is_emoji(grapheme)
+            grapheme_font = self.emoji_font if grapheme_is_emoji else self.word_font
+
+            grapheme = grapheme[0] # multi-character emoji sometimes don't render correctly
             grapheme_panel_image = self._draw_panel_image(grapheme, grapheme_font, text_color)
 
         return grapheme_panel_image
 
-    def _draw_panel_image(self, character: str, font: ImageFont, text_color: tuple[int,int,int]):
+    def _draw_panel_image(self, grapheme: str, font: ImageFont, text_color: tuple[int,int,int]):
         panel_width = self.display.panel_width()
         panel_height = self.display.panel_height()
         
         image = Image.new("RGB", (panel_width, panel_height))
         draw = ImageDraw.Draw(image)
 
-        text_width = draw.textlength(character, font=font)
-
-        text_bbox = draw.textbbox((0, 0), character, font=font)
+        text_bbox = draw.textbbox((0, 0), grapheme, font=font)
         text_width = text_bbox[2] - text_bbox[0]
         text_height = text_bbox[3] - text_bbox[1]
 
@@ -74,7 +75,7 @@ class DisplayImageGenerator:
         x = (panel_width - text_width) // 2
         y = (panel_height - text_height) // 2
 
-        draw.text((x, y), character, fill=text_color, font=font)
+        draw.text((x, y), grapheme, fill=text_color, font=font)
 
         return image
     
