@@ -12,7 +12,7 @@ def test_image_for_panel(display: Display, fill_color: tuple[int, int, int]):
 
     return image 
 
-def test_images_for_display(display: Display):
+def test_panel_images_for_display(display: Display):
     colors = [(255,0,0), (0,255,0),(0,0,255),(255,255,255)] # TODO - dynamically generate base on num_panels
     panel_images = [test_image_for_panel(display, colors[panel_number]) for panel_number in range(display.num_panels)]
     return panel_images

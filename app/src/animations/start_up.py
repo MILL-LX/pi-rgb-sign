@@ -2,7 +2,8 @@ import logging
 import time
 
 from animations.base_animation import BaseAnimation
-from util import image_util, pi_util
+from util.image_util import test_panel_images_for_display, display_image_from_panel_images
+from util import pi_util
 
 
 logger =  logging.getLogger(__name__)
@@ -12,13 +13,12 @@ class Startup(BaseAnimation):
         super().__init__(display)
 
     async def run(self, seconds:int=0, check_network:bool=False, **kwargs):
-        panel_images = image_util.test_images_for_display(self.display) # TODO - replace with a call to generate panels for each animation frame      
-
+        panel_images = test_panel_images_for_display(self.display)
 
         logger.info(f'Running startup animation for {seconds} seconds, check_network={check_network}')
         start_time = time.time()
         while True:
-            display_image = image_util.display_image_from_panel_images(panel_images)
+            display_image = display_image_from_panel_images(panel_images)
             self.display.setImage(display_image, x_offset=0, y_offset=0)
 
             # Rotate the array of panel images
