@@ -39,7 +39,7 @@ class SlotMachine(BaseAnimation):
     async def run(self, iterations: int=20, always_draw_emoji: bool=False, **kwargs):
         self.display.clear()
 
-        always_draw_emoji = 'true' == always_draw_emoji
+        always_draw_emoji = isinstance(always_draw_emoji, str) and 'true' == always_draw_emoji.lower()
         iterations = int(iterations)
 
         num_emoji_quartets = iterations // 2
