@@ -9,6 +9,7 @@ brotli = "*"
 aiohttp = "*"
 aiodns = "*"
 uniseg = "*"
+emoji = "*"
 
 [dev-packages]
 rgbmatrixemulator = "*"
