@@ -15,18 +15,12 @@ logger = logging.getLogger(__name__)
 ##############################################################
 # Configuration Constants
 ##############################################################
-_WORD_FONT_PATH = 'assets/fonts/MILL/Canada Type - Screener SC.ttf'
-_EMOJI_FONT_PATH = 'assets/fonts/Noto_Emoji/static/NotoEmoji-Medium.ttf'
 _HAPPY_WORDS_PATH = 'data/slot-machine/happy_words.txt'
 _WINNING_WORDS_PATH = 'data/slot-machine/winning_words.txt'
 
 class SlotMachine(BaseAnimation):
-    def __init__(self, display: Display, word_font_path=_WORD_FONT_PATH, emoji_font_path=_EMOJI_FONT_PATH) -> None:
+    def __init__(self, display: Display) -> None:
         super().__init__(display)
-
-        self.word_font_path = word_font_path
-        self.emoji_font_path = emoji_font_path
-        self.display_image_generator = DisplayImageGenerator(self.display, self.word_font_path, self.emoji_font_path)
 
         self.words = util.words.load_words(_HAPPY_WORDS_PATH)
         self.display_images_for_words = self.make_display_images_for_words(self.words)

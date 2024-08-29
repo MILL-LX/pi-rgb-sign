@@ -3,27 +3,16 @@ import time
 
 from animations.base_animation import BaseAnimation
 from display import Display
-from display_image_generator import DisplayImageGenerator
 
 logger = logging.getLogger(__name__)
 
-##############################################################
-# Configuration Constants
-##############################################################
-_WORD_FONT_PATH = 'assets/fonts/MILL/Canada Type - Screener SC.ttf'
-_EMOJI_FONT_PATH = 'assets/fonts/Noto_Emoji/static/NotoEmoji-Medium.ttf'
 
 class ShowMessage(BaseAnimation):
-    def __init__(self, display: Display, word_font_path=_WORD_FONT_PATH, emoji_font_path=_EMOJI_FONT_PATH) -> None:
+    def __init__(self, display: Display) -> None:
         super().__init__(display)
 
-        self.word_font_path = word_font_path
-        self.emoji_font_path = emoji_font_path
-        self.display_image_generator = DisplayImageGenerator(self.display, self.word_font_path, self.emoji_font_path)
-
-    
-    async def run(self, message, finish=None, **kwargs):
-        finish = message[:4] if not finish else finish
+    async def run(self, message: str, finish: str=None, **kwargs):
+        finish = message[:4] if not finish else finish # TODO: This should respect graphemes instead of characters
 
         self.display.clear()
 
