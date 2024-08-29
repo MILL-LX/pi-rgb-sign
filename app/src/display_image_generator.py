@@ -99,7 +99,7 @@ class DisplayImageGenerator:
 
 
     def make_panel_image_for_message(self, message: str, always_draw_emoji: bool=False):
-        panel_images = [self._make_grapheme_panel_image(g, always_draw_emoji) for g in message]
+        panel_images = [self._make_grapheme_panel_image(g, always_draw_emoji) for g in _graphemes_from_message(message)]
         display_image = self._display_image_from_panel_images(panel_images)
 
         return display_image
