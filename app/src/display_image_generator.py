@@ -34,16 +34,18 @@ class DisplayImageGenerator:
         self.emoji_font = ImageFont.truetype(emoji_font_path, size=font_size)
 
     def _make_grapheme_panel_image(self, grapheme: str, always_draw_emoji: bool=False, text_color: tuple[int,int,int]=None) -> Image:
-        image = None
-        if not always_draw_emoji:
-            try: 
-                image_file = _image_filepath_for_grapheme(grapheme)
-                image = Image.open(image_file)
-                image = image.convert('RGB')
-            except FileNotFoundError as e:
-                image = None
+        try_using_glyph = not always_draw_emoji
 
-        if not image:
+        grapheme_panel_image = None
+        if try_using_glyph and util.emoji.is_glyph_emoji(grapheme):
+            try: 
+                glyph_file_path = _image_filepath_for_grapheme(grapheme)
+                glyph_image = Image.open(glyph_file_path)
+                grapheme_panel_image = glyph_image.convert('RGB')
+            except FileNotFoundError as e:
+                grapheme_panel_image = None
+
+        if not grapheme_panel_image:
             if not text_color:
                 r = random.randint(0,255)
                 g = random.randint(0,255)
@@ -51,9 +53,9 @@ class DisplayImageGenerator:
                 text_color = (r,g,b)
 
             grapheme_font = self.emoji_font if util.emoji.is_emoji(grapheme) else self.word_font
-            image = self._draw_panel_image(grapheme, grapheme_font, text_color)
+            grapheme_panel_image = self._draw_panel_image(grapheme, grapheme_font, text_color)
 
-        return image
+        return grapheme_panel_image
 
     def _draw_panel_image(self, character: str, font: ImageFont, text_color: tuple[int,int,int]):
         panel_width = self.display.panel_width()

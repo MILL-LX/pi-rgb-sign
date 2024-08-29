@@ -14,9 +14,12 @@ def _emoji_list_from_glyphs(emoji_glyph_dir: str = _EMOJI_GLYPH_DIR):
             emoji_list.append(emoji)
     return emoji_list
 
-# _emoji_list = _emoji_list_from_glyphs()
-_emoji_list = list(emoji.EMOJI_DATA.keys())
+_glyph_emoji_list = _emoji_list_from_glyphs()
 
+def is_glyph_emoji(grapheme: str) -> bool:
+    return grapheme in _glyph_emoji_list
+
+_emoji_list = list(emoji.EMOJI_DATA.keys())
 def is_emoji(grapheme: str) -> bool:
     return grapheme in _emoji_list
 
