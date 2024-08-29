@@ -3,6 +3,7 @@ import time
 
 from animations.base_animation import BaseAnimation
 from display import Display
+from display_image_generator import grapheme_string_prefix
 
 logger = logging.getLogger(__name__)
 
@@ -12,7 +13,7 @@ class ShowMessage(BaseAnimation):
         super().__init__(display)
 
     async def run(self, message: str, finish: str=None, **kwargs):
-        finish = message[:4] if not finish else finish # TODO: This should respect graphemes instead of characters
+        finish = grapheme_string_prefix(message, 4) if not finish else finish
 
         self.display.clear()
 

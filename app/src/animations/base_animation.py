@@ -18,7 +18,6 @@ class BaseAnimation:
         self.animation_name = self.__class__.__name__
         logger.info(f'Making a {self.animation_name} animation for a display with {display.num_panels} panels.')
 
-
         self.word_font_path = word_font_path
         self.emoji_font_path = emoji_font_path
         self.display_image_generator = DisplayImageGenerator(self.display, self.word_font_path, self.emoji_font_path)

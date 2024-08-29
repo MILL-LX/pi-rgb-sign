@@ -11,6 +11,9 @@ import util.emoji
 ##############################################################
 EMOJI_GLYPHS_PATH = 'assets/emoji_glyphs/32x32'
 
+def grapheme_string_prefix(string, prefix_length):
+    return ''.join(_graphemes_from_message(string)[:prefix_length])
+
 def _graphemes_from_message(message):
     return list(grapheme_clusters(message))
 
