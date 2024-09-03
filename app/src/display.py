@@ -29,7 +29,7 @@ class Display:
         self.options.drop_privileges=False
         # self.options.show_refresh_rate = True
         self.options.pwm_bits=4
-        # self.options.pwm_lsb_nanoseconds = 130
+        self.options.pwm_lsb_nanoseconds = 2500 # Making this bigger make the image brighter
         self.options.limit_refresh_rate_hz = 200
         self.options.gpio_slowdown=5
         self.matrix = RGBMatrix(options = self.options)
