@@ -30,7 +30,8 @@ class Display:
         # self.options.show_refresh_rate = True
         self.options.pwm_bits=4
         # self.options.pwm_lsb_nanoseconds = 130
-        self.options.limit_refresh_rate_hz = 250
+        self.options.limit_refresh_rate_hz = 200
+        self.options.gpio_slowdown=5
         self.matrix = RGBMatrix(options = self.options)
         self.matrix.Clear()
 
