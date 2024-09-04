@@ -37,10 +37,6 @@ class WebApp:
 </html>
 '''
         return web.Response(text=response, content_type='text/html')
-    
-    # TODO: Remove this when the client has been updated to use the animate endpoint
-    async def legacy_trigger(self, request):
-        return await self.trigger(request, 'SlotMachine')
 
     async def trigger(self, request, animation_name=None):
         if not animation_name:
@@ -51,7 +47,6 @@ class WebApp:
         
     def add_routes(self):
         self.app.router.add_get('/', self.index)
-        self.app.router.add_get('/kick', self.legacy_trigger) # TODO: Remove this when the client has been updated to use the animate endpoint
         self.app.router.add_get('/animate/{animation}', self.trigger)
 
     def run(self):
