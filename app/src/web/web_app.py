@@ -41,9 +41,14 @@ class WebApp:
     async def trigger(self, request, animation_name=None):
         if not animation_name:
             animation_name = request.match_info['animation']
-        animation = self.animations[animation_name]
+
+        animation = self.animations.get(animation_name)
+        if not animation:
+            return web.json_response(status=404, data={'status': 'error', 'message': f'Animation {animation_name} not found'})
+
         asyncio.create_task(animation.run(**request.query))
-        return web.json_response(status=200, data={'status': 'success', 'message': f'Animation {animation_name} queued successfully'})
+
+        return web.json_response(status=200, data={'status': 'success', 'message': f'Animation {animation_name} completed successfully'})
         
     def add_routes(self):
         self.app.router.add_get('/', self.index)
