@@ -164,3 +164,6 @@ dependencies/
 
 # Log files
 logs/
+
+# ignore proprietary images
+assets/images/ape-fest/

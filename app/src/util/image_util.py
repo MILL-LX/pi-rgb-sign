@@ -17,6 +17,18 @@ def test_panel_images_for_display(display: Display):
     panel_images = [test_image_for_panel(display, colors[panel_number]) for panel_number in range(display.num_panels)]
     return panel_images
 
+
+def load_image(image_file_path: str, image_size: tuple[int, int] = None) -> Image.Image:
+    try:
+        image = Image.open(image_file_path)
+        image = image.convert('RGB')
+        if image_size != image.size:
+            sampling_filter = Image.LANCZOS if image_size > image.size else Image.BICUBIC
+            image = image.resize(image_size, sampling_filter)
+    except FileNotFoundError as e:
+        image = None
+    return image
+
 def display_image_from_panel_images(panel_images):
     num_panels = len(panel_images)
 
