@@ -4,7 +4,6 @@ import time
 
 from animations.base_animation import BaseAnimation
 from display import Display
-from display_image_generator import DisplayImageGenerator
 import util.emoji
 import util.words
 
