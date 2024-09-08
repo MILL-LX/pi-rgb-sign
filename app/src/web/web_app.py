@@ -48,7 +48,7 @@ class WebApp:
 
         asyncio.create_task(animation.run(**request.query))
 
-        return web.json_response(status=200, data={'status': 'success', 'message': f'Animation {animation_name} completed successfully'})
+        return web.json_response(status=200, data={'status': 'success', 'message': f'Animation {animation_name} queued successfully'})
         
     def add_routes(self):
         self.app.router.add_get('/', self.index)
