@@ -24,6 +24,7 @@ _LOGO_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/logos'
 _GAME_DISPLAY_SECONDS = 5
 _PANEL_DISPLAY_SECONDS = 0.1
 _WINNING_PANEL_ANIMATION_DISPLAY_SECONDS = 5
+_LOSER_MESSAGE_DISPLAY_SECONDS = 5
 _LOGO_DISPLAY_SECONDS = 3
 
 ##############################################################
@@ -60,6 +61,7 @@ class ApeFestSlotMachine(BaseAnimation):
         self.panel_display_seconds = _PANEL_DISPLAY_SECONDS
         self.winning_panel_animation_display_seconds = _WINNING_PANEL_ANIMATION_DISPLAY_SECONDS
         self.logo_display_seconds = _LOGO_DISPLAY_SECONDS
+        self.loser_message_display_seconds = _LOSER_MESSAGE_DISPLAY_SECONDS
 
         self.last_win_time = time.time() # start by assuming that the game was just won
 
@@ -92,7 +94,11 @@ class ApeFestSlotMachine(BaseAnimation):
             i += 1
 
     def _show_losing_panel_animation(self):
-        pass 
+        possible_loser_messages = ['LUSR', 'HODL', 'FOMO', 'FORK']
+        loser_message = random.choice(possible_loser_messages)
+        loser_image = self.display_image_generator.make_panel_image_for_message(loser_message)
+        self.display.setImage(loser_image, x_offset=0, y_offset=0)
+        time.sleep(self.loser_message_display_seconds)
 
     def _show_logo_images(self, display_image: Image.Image):
         logo_display_image = display_image_from_panel_images(random.sample(self.logo_images, self.display.num_panels))
