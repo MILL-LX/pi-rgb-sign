@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "107a68ab6977dc33a31ca5c4076ed27a7dcc47f32e2f63121be9b99e10f868d0"
+            "sha256": "2a38b171e909ec8e42ee536beb7bfdef594b5934f40640a0a2e1121be983d1fc"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -315,14 +315,6 @@
             ],
             "markers": "python_version >= '3.8'",
             "version": "==1.17.1"
-        },
-        "cups": {
-            "hashes": [
-                "sha256:6330d46aa3969278009d80514cbb2bee83ac3afbda18dae7a44ade3e2312c377",
-                "sha256:aa2c5b5c4f430917d32b9e0a7b367c6bf6961fa410d6de6adb16554f31455c40"
-            ],
-            "index": "pypi",
-            "version": "==0.0.6"
         },
         "emoji": {
             "hashes": [
@@ -671,6 +663,13 @@
             ],
             "markers": "python_version >= '3.8'",
             "version": "==2.22"
+        },
+        "pycups": {
+            "hashes": [
+                "sha256:843e385c1dbf694996ca84ef02a7f30c28376035588f5fbeacd6bae005cf7c8d"
+            ],
+            "index": "pypi",
+            "version": "==2.0.4"
         },
         "typing-extensions": {
             "hashes": [
