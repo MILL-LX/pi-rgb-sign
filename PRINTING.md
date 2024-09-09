@@ -10,3 +10,5 @@ sudo systemctl enable cups
 ```
 
 You can then access the CUPS web interface at http://your-raspberry-pi-ip:631.
+
+TODO - fix this doc
