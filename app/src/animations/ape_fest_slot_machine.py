@@ -67,8 +67,9 @@ class ApeFestSlotMachine(BaseAnimation):
 
 
     def _is_winning_turn(self) -> bool:
-        win_probability = 0.2
-        max_win_probability = 0.75
+        # TODO refine win probabilities
+        win_probability = 0.5 #0.2
+        max_win_probability = 0.9 #0.75
         win_probability_double_seconds = 60
 
         # double the win probability every win_probability_double_seconds since the last win, up to max_win_probability
@@ -94,6 +95,16 @@ class ApeFestSlotMachine(BaseAnimation):
             i += 1
 
     def _show_losing_panel_animation(self):
+        display_image = self.display_image_generator.make_display_image_for_message('awaiting goop')
+        display_image_width, display_image_height = display_image.size
+        for repetitions in range(1):
+            x = self.display.width()
+            while x > -display_image_width + self.display.width(): 
+                x -= self.display.panel_width() // 8
+                self.display.setImage(display_image, x_offset=x, y_offset=0)
+                time.sleep(0.05)
+
+
         possible_loser_messages = ['LUSR', 'HODL', 'FOMO', 'FORK']
         loser_message = random.choice(possible_loser_messages)
         loser_image = self.display_image_generator.make_display_image_for_message(loser_message, alternating_monochrome=True)
