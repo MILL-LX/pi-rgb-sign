@@ -96,7 +96,7 @@ class ApeFestSlotMachine(BaseAnimation):
     def _show_losing_panel_animation(self):
         possible_loser_messages = ['LUSR', 'HODL', 'FOMO', 'FORK']
         loser_message = random.choice(possible_loser_messages)
-        loser_image = self.display_image_generator.make_panel_image_for_message(loser_message)
+        loser_image = self.display_image_generator.make_display_image_for_message(loser_message, alternating_monochrome=True)
         self.display.setImage(loser_image, x_offset=0, y_offset=0)
         time.sleep(self.loser_message_display_seconds)
 

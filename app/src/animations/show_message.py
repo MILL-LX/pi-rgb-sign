@@ -17,8 +17,8 @@ class ShowMessage(BaseAnimation):
 
         self.display.clear()
 
-        display_image = self.display_image_generator.make_panel_image_for_message(message)
-        finish_image = self.display_image_generator.make_panel_image_for_message(finish)
+        display_image = self.display_image_generator.make_display_image_for_message(message)
+        finish_image = self.display_image_generator.make_display_image_for_message(finish)
         display_image_width, display_image_height = display_image.size
 
         for repetitions in range(1):

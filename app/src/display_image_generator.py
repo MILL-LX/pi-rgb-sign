@@ -33,7 +33,7 @@ class DisplayImageGenerator:
         self.word_font = ImageFont.truetype(word_font_path, size=font_size)
         self.emoji_font = ImageFont.truetype(emoji_font_path, size=font_size)
 
-    def _make_grapheme_panel_image(self, grapheme: str, always_draw_emoji: bool=False, text_color: tuple[int,int,int]=None) -> Image:
+    def _make_grapheme_panel_image(self, grapheme: str, always_draw_emoji: bool=False, text_color: tuple[int,int,int]=None, background_color: tuple[int,int,int]=None) -> Image:
         try_using_glyph = not always_draw_emoji
 
         grapheme_panel_image = None
@@ -52,19 +52,22 @@ class DisplayImageGenerator:
                 b = random.randint(0,255)
                 text_color = (r,g,b)
 
+            if not background_color:
+                background_color = (0,0,0)
+
             grapheme_is_emoji = util.emoji.is_emoji(grapheme)
             grapheme_font = self.emoji_font if grapheme_is_emoji else self.word_font
 
             grapheme = grapheme[0] # multi-character emoji sometimes don't render correctly
-            grapheme_panel_image = self._draw_panel_image(grapheme, grapheme_font, text_color)
+            grapheme_panel_image = self._draw_panel_image(grapheme, grapheme_font, text_color, background_color)
 
         return grapheme_panel_image
 
-    def _draw_panel_image(self, grapheme: str, font: ImageFont, text_color: tuple[int,int,int]):
+    def _draw_panel_image(self, grapheme: str, font: ImageFont, text_color: tuple[int,int,int], background_color: tuple[int,int,int]):
         panel_width = self.display.panel_width()
         panel_height = self.display.panel_height()
         
-        image = Image.new("RGB", (panel_width, panel_height))
+        image = Image.new("RGB", (panel_width, panel_height), background_color)
         draw = ImageDraw.Draw(image)
 
         text_bbox = draw.textbbox((0, 0), grapheme, font=font)
@@ -104,8 +107,19 @@ class DisplayImageGenerator:
         return display_image
 
 
-    def make_panel_image_for_message(self, message: str, always_draw_emoji: bool=False):
-        panel_images = [self._make_grapheme_panel_image(g, always_draw_emoji) for g in _graphemes_from_message(message)]
+    def make_display_image_for_message(self, message: str, always_draw_emoji: bool=False, alternating_monochrome: bool=False):
+        panel_images = []
+        for i, g in enumerate(_graphemes_from_message(message)):
+            if alternating_monochrome:
+                background_color = (0, 0, 0) if i % 2 == 0 else (255, 255, 255)
+                text_color = (255, 255, 255) if i % 2 == 0 else (0, 0, 0)
+            else:
+                background_color = None
+                text_color = None
+
+            panel_image = self._make_grapheme_panel_image(g, always_draw_emoji, text_color, background_color)
+            panel_images.append(panel_image)
+
         display_image = self._display_image_from_panel_images(panel_images)
 
         return display_image

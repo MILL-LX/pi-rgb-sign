@@ -30,7 +30,7 @@ class SlotMachine(BaseAnimation):
         display_images = {}
         for word in words:
             if not display_images.get(word):
-                panel_image = self.display_image_generator.make_panel_image_for_message(word, always_draw_emoji)
+                panel_image = self.display_image_generator.make_display_image_for_message(word, always_draw_emoji)
                 display_images[word] = panel_image
 
         return display_images
