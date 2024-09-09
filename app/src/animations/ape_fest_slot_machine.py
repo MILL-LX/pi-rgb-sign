@@ -24,20 +24,29 @@ _LOGO_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/logos'
 _GAME_DISPLAY_SECONDS = 5
 _PANEL_DISPLAY_SECONDS = 0.1
 _WINNING_PANEL_ANIMATION_DISPLAY_SECONDS = 5
-_LOGO_DISPLAY_SECONDS = 5
+_LOGO_DISPLAY_SECONDS = 3
 
 ##############################################################
 # Helper Functions
 ##############################################################
-def _select_random_images_files_from_directory(directory_path: str, num_images: int) -> list[str]:
-    image_file_paths = [os.path.join(directory_path, file) for file in os.listdir(directory_path)]
+def _image_file_paths_from_directory(directory_path: str) -> list[str]:
+    excluded_filenames = {'.DS_Store'}
+    return [
+        os.path.join(root, file)
+        for root, _, files in os.walk(directory_path)
+        for file in files
+        if not file.startswith('.') and file not in excluded_filenames
+    ]
+
+def _select_random_image_files_from_directory(directory_path: str, num_images: int) -> list[str]:
+    image_file_paths = _image_file_paths_from_directory(directory_path)
     return random.choices(image_file_paths, k=num_images) 
 
 def _load_images_for_file_paths(image_file_paths: list[str], image_size: tuple[int, int]) -> list[Image.Image]:
     return [load_image(image_file_path, image_size) for image_file_path in image_file_paths]
 
 def _load_images_from_directory(directory_path: str, image_size: tuple[int, int] = None) -> list[Image.Image]:
-    image_file_paths = [os.path.join(directory_path, file) for file in os.listdir(directory_path)]
+    image_file_paths = _image_file_paths_from_directory(directory_path)
     return _load_images_for_file_paths(image_file_paths, image_size)   
 
 class ApeFestSlotMachine(BaseAnimation):
@@ -45,7 +54,7 @@ class ApeFestSlotMachine(BaseAnimation):
         super().__init__(display)
 
         self.logo_images = _load_images_from_directory(_LOGO_IMAGE_DIRECTORY_PATH, self.display.size())   
-        self.panel_image_file_paths = [os.path.join(_PANEL_IMAGE_DIRECTORY_PATH, file) for file in os.listdir(_PANEL_IMAGE_DIRECTORY_PATH)]    
+        self.panel_image_file_paths = _image_file_paths_from_directory(_PANEL_IMAGE_DIRECTORY_PATH)    
 
         self.game_display_seconds = _GAME_DISPLAY_SECONDS
         self.panel_display_seconds = _PANEL_DISPLAY_SECONDS
