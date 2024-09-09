@@ -9,16 +9,22 @@ def create_image_variants(image_path, num_variants):
     base_name, ext = os.path.splitext(image_path)
     
     for i in range(num_variants):
-        # Create a color variant
-        enhancer = ImageEnhance.Color(original_image)
-        factor = 0.1 + (i / num_variants) * 1.9  # Vary the color factor between 0.1 and 2.0
-        variant_image = enhancer.enhance(factor)
-        
+        variant_image = original_image.copy()
         # Randomly reassign the red value
         variant_image = variant_image.convert("RGB")
         data = variant_image.getdata()
         new_data = [(random.randint(0, 255), g, b) for r, g, b in data]
         variant_image.putdata(new_data)
+        
+        # Apply additional variations
+        if i % 2 == 0:
+            variant_image = variant_image.transpose(Image.FLIP_TOP_BOTTOM)  # Turn the image upside-down
+        
+        if i % 3 == 0:
+            variant_image = variant_image.convert("RGB")
+            data = variant_image.getdata()
+            new_data = [(b, g, r) for r, g, b in data]  # Swap color components
+            variant_image.putdata(new_data)
         
         # Save the variant image
         variant_filename = f"{base_name}-var{i:04d}{ext}"
