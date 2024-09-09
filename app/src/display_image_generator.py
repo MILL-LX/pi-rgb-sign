@@ -47,9 +47,9 @@ class DisplayImageGenerator:
 
         if not grapheme_panel_image:
             if not text_color:
-                r = random.randint(0,255)
-                g = random.randint(0,255)
-                b = random.randint(0,255)
+                r = random.randint(128,255)
+                g = random.randint(128,255)
+                b = random.randint(128,255)
                 text_color = (r,g,b)
 
             if not background_color:
