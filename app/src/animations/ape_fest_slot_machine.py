@@ -9,7 +9,7 @@ from animations.base_animation import BaseAnimation
 from display import Display
 from util.image_util import load_image, display_image_from_panel_images
 from util.pi_util import is_raspberry_pi
-from util.print_util import print_file
+# from util.print_util import print_file
 
 
 logger = logging.getLogger(__name__)
