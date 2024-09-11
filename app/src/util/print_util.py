@@ -4,12 +4,16 @@ import cups
 
 _printer_name = "ThermalPrinterAPE"
 _cups_server = "10.10.10.186"
-_printer_connection = cups.Connection(host=_cups_server)
+_printer_connection = None
 
 def print_file(file_path):
     global _printer_connection
     if not _printer_connection:
-        _printer_connection = cups.Connection(host=_cups_server)    
+        try:
+            _printer_connection = cups.Connection(host=_cups_server)    
+        except Exception as e:
+            print(f"Error connecting to printer: {e}")
+            return None
 
     return _printer_connection.printFile(_printer_name, file_path, "Print Job", {})
 
