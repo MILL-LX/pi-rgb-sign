@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 ##############################################################
 # Configuration Constants
 ##############################################################
-_IMAGE_DIRECTORY_PATH = '/mnt/slot-machine-data/images/ape-fest' if is_raspberry_pi() else 'assets/images/ape-fest'
+_IMAGE_DIRECTORY_PATH = '/mnt/slot-machine-data/images/ape-fest' if is_raspberry_pi() else 'assets/images/apefest'
 _PANEL_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/panels'
 _LOGO_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/logos'
 

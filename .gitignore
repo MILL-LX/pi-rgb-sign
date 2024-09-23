@@ -166,7 +166,7 @@ dependencies/
 logs/
 
 # ignore proprietary images
-assets/images/ape-fest/
+assets/images/apefest/
 
 # cruft
 .DS_Store
