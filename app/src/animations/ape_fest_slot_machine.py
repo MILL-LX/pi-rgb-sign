@@ -151,14 +151,21 @@ class ApeFestSlotMachine(BaseAnimation):
             self.display.setImage(display_image, x_offset=0, y_offset=0)
             time.sleep(self.panel_display_seconds)
 
+        win = self._is_winning_turn()
+        if win:
+            winning_panel_image = load_image(_select_random_image_files_from_directory(_PANEL_IMAGE_DIRECTORY_PATH, 1)[0], self.display.size())
+            display_image = display_image_from_panel_images([winning_panel_image for _ in range(self.display.num_panels)])
+            self.display.setImage(display_image, x_offset=0, y_offset=0)
+
         time.sleep(_FINAL_IMAGE_DISPLAY_SECONDS)
 
-        prize_image_file_path = _select_random_image_files_from_directory(_LOSING_TICKET_IMAGES_DIRECTORY_PATH, 1)[0]
-        if self._is_winning_turn():
+
+        if win:
             prize_image_file_path = _select_random_image_files_from_directory(_WINNING_TICKET_IMAGES_DIRECTORY_PATH, 1)[0]
             self._show_winning_panel_animation(display_image)
         else:
-            self._show_losing_panel_animation(display_image)
+            prize_image_file_path = _select_random_image_files_from_directory(_LOSING_TICKET_IMAGES_DIRECTORY_PATH, 1)[0]
+            self._show_losing_panel_animation()
 
         print_file(prize_image_file_path, self.use_printer)
 
