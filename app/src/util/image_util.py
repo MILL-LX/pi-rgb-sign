@@ -20,11 +20,11 @@ def test_panel_images_for_display(display: Display):
     return panel_images
 
 
-def load_image(image_file_path: str, image_size: tuple[int, int] = None) -> Image.Image:
+def load_image(image_file_path: str, image_size: tuple[int, int] = None, background_color: tuple[int, int, int, int] = (127, 0, 0, 255)) -> Image.Image:
     try:
         image = Image.open(image_file_path).convert("RGBA")
         if image.mode == 'RGBA':
-            red_background = Image.new("RGBA", image.size, (127, 0, 0, 255))
+            red_background = Image.new("RGBA", image.size, background_color)
             image = Image.alpha_composite(red_background, image)
 
         image = image.convert('RGB')

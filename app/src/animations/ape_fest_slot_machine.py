@@ -99,13 +99,13 @@ class ApeFestSlotMachine(BaseAnimation):
 
         return win
 
-    def _show_winning_panel_animation(self, winning_panel_image: Image.Image):
-        # Show an alternating pattern of the winning panel image and its inverse
-        inverse_winning_panel_image = ImageOps.invert(winning_panel_image)
+    def _show_winning_panel_animation(self, winning_panel_image: Image.Image, alternate_winning_panel_image: Image.Image=None):
+        alternate_winning_panel_image = ImageOps.invert(winning_panel_image) if alternate_winning_panel_image is None else alternate_winning_panel_image
+        
         start_time = time.time()
         i = 0
         while time.time() - start_time < self.winning_panel_animation_display_seconds:
-            self.display.setImage(winning_panel_image if i % 2 == 0 else inverse_winning_panel_image, x_offset=0, y_offset=0)
+            self.display.setImage(winning_panel_image if i % 2 == 0 else alternate_winning_panel_image, x_offset=0, y_offset=0)
             time.sleep(self.panel_display_seconds) 
             i += 1
 
@@ -152,9 +152,19 @@ class ApeFestSlotMachine(BaseAnimation):
             time.sleep(self.panel_display_seconds)
 
         win = self._is_winning_turn()
+
+        alternate_winning_display_image = None
         if win:
-            winning_panel_image = load_image(_select_random_image_files_from_directory(_PANEL_IMAGE_DIRECTORY_PATH, 1)[0], self.display.size())
+            winning_panel_image_file_path = _select_random_image_files_from_directory(_PANEL_IMAGE_DIRECTORY_PATH, 1)[0]
+            winning_panel_image_background_color = (127, 0, 0, 255)
+            winning_panel_image = load_image(winning_panel_image_file_path, self.display.size(), winning_panel_image_background_color )
             display_image = display_image_from_panel_images([winning_panel_image for _ in range(self.display.num_panels)])
+
+            alternate_winning_panel_image = ImageOps.invert(winning_panel_image)
+            alternate_winning_panel_image_background_color = (0, 0, 127, 255)
+            alternate_winning_panel_image = load_image(winning_panel_image_file_path, self.display.size(), alternate_winning_panel_image_background_color )
+            alternate_winning_display_image = display_image_from_panel_images([alternate_winning_panel_image for _ in range(self.display.num_panels)])
+
             self.display.setImage(display_image, x_offset=0, y_offset=0)
 
         time.sleep(_FINAL_IMAGE_DISPLAY_SECONDS)
