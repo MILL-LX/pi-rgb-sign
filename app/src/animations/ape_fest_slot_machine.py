@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 ##############################################################
 _IMAGE_DIRECTORY_PATH = '/mnt/slot-machine-data/images/apefest' if is_raspberry_pi() else 'assets/images/apefest'
 _PANEL_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/panels'
+_LETTER_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/letter_panels'
 _LOGO_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/logos'
 _LOSING_PANEL_ANIMATION_FILE_PATH = f'{_IMAGE_DIRECTORY_PATH}/panel_animated_gifs/drip_A_transparent.gif'
 _PRINTER_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/printer'
@@ -119,7 +120,15 @@ class ApeFestSlotMachine(BaseAnimation):
 
         possible_loser_messages = ['LUSR', 'HODL', 'FOMO', 'FORK']
         loser_message = random.choice(possible_loser_messages)
-        loser_image = self.display_image_generator.make_display_image_for_message(loser_message, alternating_monochrome=True)
+        loser_message = 'LUSR' # TODO: Stop hardcoding loser message    
+        letter_images = []
+        for letter in loser_message:
+            letter_image_file_path = os.path.join(_LETTER_IMAGE_DIRECTORY_PATH, f'{letter}.png')
+            background_color = (random.randint(100, 200), random.randint(100, 200), random.randint(100, 200), 255)
+            letter_image = load_image(letter_image_file_path, self.display.size(), background_color)
+            letter_images.append(letter_image)
+        loser_image = display_image_from_panel_images(letter_images)
+
         self.display.setImage(loser_image, x_offset=0, y_offset=0)
         time.sleep(self.loser_message_display_seconds)
 
