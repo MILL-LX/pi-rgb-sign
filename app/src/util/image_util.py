@@ -22,13 +22,20 @@ def test_panel_images_for_display(display: Display):
 
 def load_image(image_file_path: str, image_size: tuple[int, int] = None) -> Image.Image:
     try:
-        image = Image.open(image_file_path)
+        image = Image.open(image_file_path).convert("RGBA")
+        if image.mode == 'RGBA':
+            red_background = Image.new("RGBA", image.size, (127, 0, 0, 255))
+            image = Image.alpha_composite(red_background, image)
+
         image = image.convert('RGB')
+
         if image_size != image.size:
             sampling_filter = Image.LANCZOS if image_size > image.size else Image.BICUBIC
             image = image.resize(image_size, sampling_filter)
+
     except FileNotFoundError as e:
         image = None
+
     return image
 
 def display_image_from_panel_images(panel_images):
