@@ -26,9 +26,12 @@ _LOSING_PRIZE_IMAGE_FILE_PATH = f'{_IMAGE_DIRECTORY_PATH}/printer/loser_ticket.j
 
 _GAME_DISPLAY_SECONDS = 5
 _PANEL_DISPLAY_SECONDS = 0.1
+_FINAL_IMAGE_DISPLAY_SECONDS = 3
 _WINNING_PANEL_ANIMATION_DISPLAY_SECONDS = 5
 _LOSER_MESSAGE_DISPLAY_SECONDS = 5
 _LOGO_DISPLAY_SECONDS = 3
+
+_STARTING_WIN_PROBABILITY = 0.2
 
 ##############################################################
 # Helper Functions
@@ -75,7 +78,7 @@ class ApeFestSlotMachine(BaseAnimation):
 
 
     def _is_winning_turn(self) -> bool:
-        win_probability = 0.2
+        win_probability = _STARTING_WIN_PROBABILITY
         max_win_probability = 0.75
         win_probability_double_seconds = 60
 
@@ -88,6 +91,7 @@ class ApeFestSlotMachine(BaseAnimation):
 
         if win:
             self.last_win_time = time.time()
+            win_probability = _STARTING_WIN_PROBABILITY
 
         return win
 
@@ -142,6 +146,8 @@ class ApeFestSlotMachine(BaseAnimation):
             display_image = display_images[display_image_index]
             self.display.setImage(display_image, x_offset=0, y_offset=0)
             time.sleep(self.panel_display_seconds)
+
+        time.sleep(_FINAL_IMAGE_DISPLAY_SECONDS)
 
         prize_image_file_path = _LOSING_PRIZE_IMAGE_FILE_PATH
         if self._is_winning_turn():
