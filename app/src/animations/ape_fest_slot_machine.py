@@ -102,15 +102,12 @@ class ApeFestSlotMachine(BaseAnimation):
             i += 1
 
     def _show_losing_panel_animation(self):
-        display_image = self.display_image_generator.make_display_image_for_message('awaiting goop')
-        display_image_width, display_image_height = display_image.size
-        for repetitions in range(1):
-            x = self.display.width()
-            while x > -display_image_width + self.display.width(): 
-                x -= self.display.panel_width() // 8
-                self.display.setImage(display_image, x_offset=x, y_offset=0)
-                time.sleep(0.05)
-
+        start_time = time.time()
+        i = 0
+        while time.time() - start_time < self.winning_panel_animation_display_seconds:
+            self.display.setImage(self.losing_display_animation_images[i % len(self.losing_display_animation_images)], x_offset=0, y_offset=0)
+            time.sleep(1/self.losing_panel_animation_fps) 
+            i += 1
 
         possible_loser_messages = ['LUSR', 'HODL', 'FOMO', 'FORK']
         loser_message = random.choice(possible_loser_messages)
