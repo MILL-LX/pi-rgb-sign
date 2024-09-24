@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 _IMAGE_DIRECTORY_PATH = '/mnt/slot-machine-data/images/apefest' if is_raspberry_pi() else 'assets/images/apefest'
 _PANEL_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/panels'
 _LOGO_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/logos'
-_LOSER_PRIZE_IMAGE_FILE_PATH = f'{_IMAGE_DIRECTORY_PATH}/printer/loser_ticket.jpg'
+_LOSING_PRIZE_IMAGE_FILE_PATH = f'{_IMAGE_DIRECTORY_PATH}/printer/loser_ticket.jpg'
 
 _GAME_DISPLAY_SECONDS = 5
 _PANEL_DISPLAY_SECONDS = 0.1
@@ -140,7 +140,7 @@ class ApeFestSlotMachine(BaseAnimation):
             self.display.setImage(display_image, x_offset=0, y_offset=0)
             time.sleep(self.panel_display_seconds)
 
-        prize_image_file_path = _LOSER_PRIZE_IMAGE_FILE_PATH
+        prize_image_file_path = _LOSING_PRIZE_IMAGE_FILE_PATH
         if self._is_winning_turn():
             self._show_winning_panel_animation(display_image)
             prize_image_file_path = None
