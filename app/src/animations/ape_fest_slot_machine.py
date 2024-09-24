@@ -21,8 +21,11 @@ logger = logging.getLogger(__name__)
 _IMAGE_DIRECTORY_PATH = '/mnt/slot-machine-data/images/apefest' if is_raspberry_pi() else 'assets/images/apefest'
 _PANEL_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/panels'
 _LOGO_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/logos'
-_LOSING_PANEL_ANIMATION_FILE_PATH = f'{_IMAGE_DIRECTORY_PATH}/panel_animated_gifs/drip_A.gif'
-_LOSING_PRIZE_IMAGE_FILE_PATH = f'{_IMAGE_DIRECTORY_PATH}/printer/loser_ticket.jpg'
+_LOSING_PANEL_ANIMATION_FILE_PATH = f'{_IMAGE_DIRECTORY_PATH}/panel_animated_gifs/drip_A_transparent.gif'
+_PRINTER_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/printer'
+_LOSING_TICKET_IMAGES_DIRECTORY_PATH = f'{_PRINTER_IMAGE_DIRECTORY_PATH}/loser_tickets'
+_WINNING_TICKET_IMAGES_DIRECTORY_PATH = f'{_PRINTER_IMAGE_DIRECTORY_PATH}/winner_tickets'
+_USE_PRINTER_FLAG_FILE_PATH = f'{_PRINTER_IMAGE_DIRECTORY_PATH}/use_printer'
 
 _GAME_DISPLAY_SECONDS = 5
 _PANEL_DISPLAY_SECONDS = 0.1
@@ -76,6 +79,7 @@ class ApeFestSlotMachine(BaseAnimation):
 
         self.last_win_time = time.time() # start by assuming that the game was just won
 
+        self.use_printer = os.path.exists(_USE_PRINTER_FLAG_FILE_PATH)
 
     def _is_winning_turn(self) -> bool:
         win_probability = _STARTING_WIN_PROBABILITY
@@ -149,14 +153,13 @@ class ApeFestSlotMachine(BaseAnimation):
 
         time.sleep(_FINAL_IMAGE_DISPLAY_SECONDS)
 
-        prize_image_file_path = _LOSING_PRIZE_IMAGE_FILE_PATH
+        prize_image_file_path = _select_random_image_files_from_directory(_LOSING_TICKET_IMAGES_DIRECTORY_PATH, 1)[0]
         if self._is_winning_turn():
+            prize_image_file_path = _select_random_image_files_from_directory(_WINNING_TICKET_IMAGES_DIRECTORY_PATH, 1)[0]
             self._show_winning_panel_animation(display_image)
-            prize_image_file_path = None
         else:
-            self._show_losing_panel_animation()
+            self._show_losing_panel_animation(display_image)
 
-        if prize_image_file_path:
-            print_file(prize_image_file_path)
+        print_file(prize_image_file_path, self.use_printer)
 
         self._show_logo_images(display_image)

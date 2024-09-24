@@ -1,11 +1,13 @@
 import cups
 
 _printer_name = 'ThermalPrinterAPE'
-_cups_server = 'thermalprinter.local' #TODO: update for printer on ApeFest Router
+_cups_server = 'thermalprinter.local'
 _printer_connection = None
 
-def print_file(file_path):
-    return None # TODO: temporarily disabled to save paper
+def print_file(file_path, use_printer=False):
+    if not use_printer:
+        print(f'Skipping printing file: {file_path}')
+        return None
 
     global _printer_connection
     print_job_id = None
