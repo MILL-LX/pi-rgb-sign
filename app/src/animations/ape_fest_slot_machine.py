@@ -9,7 +9,7 @@ from animations.base_animation import BaseAnimation
 from display import Display
 from util.image_util import load_image, display_image_from_panel_images
 from util.pi_util import is_raspberry_pi
-# from util.print_util import print_file
+from util.print_util import print_file
 
 
 logger = logging.getLogger(__name__)
@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 _IMAGE_DIRECTORY_PATH = '/mnt/slot-machine-data/images/apefest' if is_raspberry_pi() else 'assets/images/apefest'
 _PANEL_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/panels'
 _LOGO_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/logos'
+_LOSER_PRIZE_IMAGE_FILE_PATH = f'{_IMAGE_DIRECTORY_PATH}/printer/loser_ticket.jpg'
 
 _GAME_DISPLAY_SECONDS = 5
 _PANEL_DISPLAY_SECONDS = 0.1
@@ -139,9 +140,15 @@ class ApeFestSlotMachine(BaseAnimation):
             self.display.setImage(display_image, x_offset=0, y_offset=0)
             time.sleep(self.panel_display_seconds)
 
+        prize_image_file_path = _LOSER_PRIZE_IMAGE_FILE_PATH
         if self._is_winning_turn():
             self._show_winning_panel_animation(display_image)
+            prize_image_file_path = None
         else:
             self._show_losing_panel_animation()
+
+        if prize_image_file_path:
+            # print_file(prize_image_file_path) # TODO: disabled to save paper
+            pass
 
         self._show_logo_images(display_image)

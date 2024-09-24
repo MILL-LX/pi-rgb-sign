@@ -3,7 +3,7 @@ import cups
 # lp -d ThermalPrinterAPE assets/emoji_glyphs/32x32/1f3c4-1f3fc-200d-2640-fe0f.png
 
 _printer_name = 'ThermalPrinterAPE'
-_cups_server = '10.10.10.186' #TODO: update for printer on ApeFest Router
+_cups_server = 'thermalprinter.local' #TODO: update for printer on ApeFest Router
 _printer_connection = None
 
 def print_file(file_path):
