@@ -118,9 +118,8 @@ class ApeFestSlotMachine(BaseAnimation):
             time.sleep(1/self.losing_panel_animation_fps) 
             i += 1
 
-        possible_loser_messages = ['LUSR', 'HODL', 'FOMO', 'FORK']
+        possible_loser_messages = ['LOSR', 'HODL', 'FOMO', 'FORK']
         loser_message = random.choice(possible_loser_messages)
-        loser_message = 'LUSR' # TODO: Stop hardcoding loser message    
         letter_images = []
         for letter in loser_message:
             letter_image_file_path = os.path.join(_LETTER_IMAGE_DIRECTORY_PATH, f'{letter}.png')
