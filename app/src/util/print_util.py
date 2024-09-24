@@ -5,6 +5,8 @@ _cups_server = 'thermalprinter.local' #TODO: update for printer on ApeFest Route
 _printer_connection = None
 
 def print_file(file_path):
+    return None # TODO: temporarily disabled to save paper
+
     global _printer_connection
     print_job_id = None
 

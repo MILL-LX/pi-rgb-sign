@@ -7,7 +7,7 @@ from PIL import Image, ImageOps
 
 from animations.base_animation import BaseAnimation
 from display import Display
-from util.image_util import load_image, display_image_from_panel_images
+from util.image_util import load_image, display_image_from_panel_images, load_animation_from_file
 from util.pi_util import is_raspberry_pi
 from util.print_util import print_file
 
@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 _IMAGE_DIRECTORY_PATH = '/mnt/slot-machine-data/images/apefest' if is_raspberry_pi() else 'assets/images/apefest'
 _PANEL_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/panels'
 _LOGO_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/logos'
+_LOSING_PANEL_ANIMATION_FILE_PATH = f'{_IMAGE_DIRECTORY_PATH}/panel_animated_gifs/drip_A.gif'
 _LOSING_PRIZE_IMAGE_FILE_PATH = f'{_IMAGE_DIRECTORY_PATH}/printer/loser_ticket.jpg'
 
 _GAME_DISPLAY_SECONDS = 5
@@ -58,6 +59,7 @@ class ApeFestSlotMachine(BaseAnimation):
 
         self.logo_images = _load_images_from_directory(_LOGO_IMAGE_DIRECTORY_PATH, self.display.size())   
         self.panel_image_file_paths = _image_file_paths_from_directory(_PANEL_IMAGE_DIRECTORY_PATH)    
+        self.losing_panel_animation_images, self.losing_panel_animation_fps = load_animation_from_file(_LOSING_PANEL_ANIMATION_FILE_PATH, self.display.size())
 
         self.game_display_seconds = _GAME_DISPLAY_SECONDS
         self.panel_display_seconds = _PANEL_DISPLAY_SECONDS
@@ -148,7 +150,6 @@ class ApeFestSlotMachine(BaseAnimation):
             self._show_losing_panel_animation()
 
         if prize_image_file_path:
-            # print_file(prize_image_file_path) # TODO: disabled to save paper
-            pass
+            print_file(prize_image_file_path)
 
         self._show_logo_images(display_image)

@@ -59,3 +59,33 @@ def display_image_from_panel_images(panel_images):
         current_x += panel_width
 
     return display_image
+
+def load_animation_from_file(file_path: str, image_size: tuple[int, int] = None) -> tuple[list[Image.Image], int]:
+    with Image.open(file_path) as img:
+        frames = []
+        try:
+            while True:
+                image =  img.copy()
+
+                if image.mode == 'RGBA':
+                    background = Image.new("RGBA", image.size, (127, 0, 0, 255))
+                    image = Image.alpha_composite(background, image)
+
+                image = image.convert('RGB')
+
+                if image_size != image.size:
+                    sampling_filter = Image.LANCZOS if image_size > image.size else Image.BICUBIC
+                    image = image.resize(image_size, sampling_filter)
+
+                frames.append(image)
+
+                img.seek(img.tell() + 1)
+        except EOFError:
+            pass  # End of frames
+
+
+        # Get the frames per second (fps) from the info dictionary
+        fps = img.info.get('duration', 100)  # Default to 100 ms if not available
+        fps = 1000 / fps  # Convert to fps
+
+    return frames, fps
