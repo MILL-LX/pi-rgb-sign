@@ -61,6 +61,10 @@ class ApeFestSlotMachine(BaseAnimation):
         self.panel_image_file_paths = _image_file_paths_from_directory(_PANEL_IMAGE_DIRECTORY_PATH)    
         self.losing_panel_animation_images, self.losing_panel_animation_fps = load_animation_from_file(_LOSING_PANEL_ANIMATION_FILE_PATH, self.display.size())
 
+        self.losing_display_animation_images = []
+        for losing_panel_animation_image in self.losing_panel_animation_images:
+            self.losing_display_animation_images.append(display_image_from_panel_images([losing_panel_animation_image for _ in range(self.display.num_panels)]))
+
         self.game_display_seconds = _GAME_DISPLAY_SECONDS
         self.panel_display_seconds = _PANEL_DISPLAY_SECONDS
         self.winning_panel_animation_display_seconds = _WINNING_PANEL_ANIMATION_DISPLAY_SECONDS
