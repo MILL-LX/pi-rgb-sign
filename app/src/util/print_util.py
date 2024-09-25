@@ -21,7 +21,13 @@ def print_file(file_path, use_printer=False):
 
     if _printer_connection:
         try:
-            print_job_id = _printer_connection.printFile(_printer_name, file_path, 'Print Job', {})
+            print_options = {}
+
+            # TODO: Rotation can be tried using print options below
+            # valid values are 4, 5, 6
+            # print_options = {'orientation-requested':'4'}
+
+            print_job_id = _printer_connection.printFile(_printer_name, file_path, 'Print Job', print_options)
         except Exception as e:
             print(f'Error printing file: {e}')
             _printer_connection = None
