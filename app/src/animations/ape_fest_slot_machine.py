@@ -23,6 +23,7 @@ _PANEL_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/panels'
 _LETTER_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/letter_panels'
 _LOGO_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/logos'
 _LOSING_PANEL_ANIMATION_FILE_PATH = f'{_IMAGE_DIRECTORY_PATH}/panel_animated_gifs/drip_A.gif'
+_LOSING_DISPLAY_ANIMATION_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/display_animated_gifs'
 _PRINTER_IMAGE_DIRECTORY_PATH = f'{_IMAGE_DIRECTORY_PATH}/printer'
 _LOSING_TICKET_IMAGES_DIRECTORY_PATH = f'{_PRINTER_IMAGE_DIRECTORY_PATH}/loser_tickets'
 _WINNING_TICKET_IMAGES_DIRECTORY_PATH = f'{_PRINTER_IMAGE_DIRECTORY_PATH}/winner_tickets'
@@ -32,6 +33,7 @@ _GAME_DISPLAY_SECONDS = 5
 _PANEL_DISPLAY_SECONDS = 0.1
 _FINAL_IMAGE_DISPLAY_SECONDS = 3
 _WINNING_PANEL_ANIMATION_DISPLAY_SECONDS = 5
+_LOSING_PANEL_ANIMATION_DISPLAY_SECONDS = 5
 _LOSER_MESSAGE_DISPLAY_SECONDS = 5
 _LOGO_DISPLAY_SECONDS = 3
 
@@ -75,6 +77,7 @@ class ApeFestSlotMachine(BaseAnimation):
         self.game_display_seconds = _GAME_DISPLAY_SECONDS
         self.panel_display_seconds = _PANEL_DISPLAY_SECONDS
         self.winning_panel_animation_display_seconds = _WINNING_PANEL_ANIMATION_DISPLAY_SECONDS
+        self.losing_panel_animation_display_seconds = _LOSING_PANEL_ANIMATION_DISPLAY_SECONDS
         self.logo_display_seconds = _LOGO_DISPLAY_SECONDS
         self.loser_message_display_seconds = _LOSER_MESSAGE_DISPLAY_SECONDS
 
@@ -113,23 +116,29 @@ class ApeFestSlotMachine(BaseAnimation):
     def _show_losing_panel_animation(self):
         start_time = time.time()
         i = 0
-        while time.time() - start_time < self.winning_panel_animation_display_seconds:
+        while time.time() - start_time < self.losing_panel_animation_display_seconds:
             self.display.setImage(self.losing_display_animation_images[i % len(self.losing_display_animation_images)], x_offset=0, y_offset=0)
             time.sleep(1/self.losing_panel_animation_fps) 
             i += 1
 
-        possible_loser_messages = ['LOSR', 'HODL', 'FOMO', 'FORK']
-        loser_message = random.choice(possible_loser_messages)
-        letter_images = []
-        for letter in loser_message:
-            letter_image_file_path = os.path.join(_LETTER_IMAGE_DIRECTORY_PATH, f'{letter}.png')
-            background_color = (random.randint(100, 200), random.randint(100, 200), random.randint(100, 200), 255)
-            letter_image = load_image(letter_image_file_path, self.display.size(), background_color)
-            letter_images.append(letter_image)
-        loser_image = display_image_from_panel_images(letter_images)
+        # possible_loser_messages = ['LOSR', 'HODL', 'FOMO', 'FORK']
+        # loser_message = random.choice(possible_loser_messages)
+        # letter_images = []
+        # for letter in loser_message:
+        #     letter_image_file_path = os.path.join(_LETTER_IMAGE_DIRECTORY_PATH, f'{letter}.png')
+        #     background_color = (random.randint(100, 200), random.randint(100, 200), random.randint(100, 200), 255)
+        #     letter_image = load_image(letter_image_file_path, self.display.size(), background_color)
+        #     letter_images.append(letter_image)
+        # loser_image = display_image_from_panel_images(letter_images)
+        try:
+            random_loser_message_animation_file_path = _select_random_image_files_from_directory(_LOSING_DISPLAY_ANIMATION_DIRECTORY_PATH, 1)[0]
+            loser_message_animation_frames, loser_message_animation_fps = load_animation_from_file(random_loser_message_animation_file_path, self.display.size())
+            for loser_message_animation_frame in loser_message_animation_frames:
+                self.display.setImage(loser_message_animation_frame, x_offset=0, y_offset=0)
+                time.sleep(1/loser_message_animation_fps) 
+        except Exception as e:
+            logger.error(f'Error showing losing panel animation: {e}')
 
-        self.display.setImage(loser_image, x_offset=0, y_offset=0)
-        time.sleep(self.loser_message_display_seconds)
 
     def _show_logo_images(self, display_image: Image.Image):
         logo_panel_image = random.choice(self.logo_images)
