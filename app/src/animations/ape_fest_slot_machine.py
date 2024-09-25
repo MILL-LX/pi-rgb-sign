@@ -132,7 +132,8 @@ class ApeFestSlotMachine(BaseAnimation):
         time.sleep(self.loser_message_display_seconds)
 
     def _show_logo_images(self, display_image: Image.Image):
-        logo_display_image = display_image_from_panel_images(random.sample(self.logo_images, self.display.num_panels))
+        logo_panel_image = random.choice(self.logo_images)
+        logo_display_image = display_image_from_panel_images([logo_panel_image for _ in range(self.display.num_panels)])
         self.display.setImage(logo_display_image, x_offset=0, y_offset=0)
 
         time.sleep(self.logo_display_seconds)
