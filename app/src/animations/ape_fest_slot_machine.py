@@ -66,9 +66,9 @@ class ApeFestSlotMachine(BaseAnimation):
     def __init__(self, display: Display) -> None:
         super().__init__(display)
 
-        self.logo_images = _load_images_from_directory(_LOGO_IMAGE_DIRECTORY_PATH, self.display.size())   
+        self.logo_images = _load_images_from_directory(_LOGO_IMAGE_DIRECTORY_PATH, self.display.panel_size())   
         self.panel_image_file_paths = _image_file_paths_from_directory(_PANEL_IMAGE_DIRECTORY_PATH)    
-        self.losing_panel_animation_images, self.losing_panel_animation_fps = load_animation_from_file(_LOSING_PANEL_ANIMATION_FILE_PATH, self.display.size())
+        self.losing_panel_animation_images, self.losing_panel_animation_fps = load_animation_from_file(_LOSING_PANEL_ANIMATION_FILE_PATH, self.display.panel_size())
 
         self.losing_display_animation_images = []
         for losing_panel_animation_image in self.losing_panel_animation_images:
@@ -86,6 +86,8 @@ class ApeFestSlotMachine(BaseAnimation):
         self.use_printer = os.path.exists(_USE_PRINTER_FLAG_FILE_PATH)
 
     def _is_winning_turn(self) -> bool:
+        return False # DEBUG: always return false
+    
         win_probability = _STARTING_WIN_PROBABILITY
         max_win_probability = 0.75
         win_probability_double_seconds = 60
@@ -127,7 +129,7 @@ class ApeFestSlotMachine(BaseAnimation):
         # for letter in loser_message:
         #     letter_image_file_path = os.path.join(_LETTER_IMAGE_DIRECTORY_PATH, f'{letter}.png')
         #     background_color = (random.randint(100, 200), random.randint(100, 200), random.randint(100, 200), 255)
-        #     letter_image = load_image(letter_image_file_path, self.display.size(), background_color)
+        #     letter_image = load_image(letter_image_file_path, self.display.panelsize(), background_color)
         #     letter_images.append(letter_image)
         # loser_image = display_image_from_panel_images(letter_images)
         try:
@@ -156,7 +158,7 @@ class ApeFestSlotMachine(BaseAnimation):
         num_display_images = int(self.game_display_seconds / self.panel_display_seconds)
         num_panel_images = self.display.num_panels * num_display_images
         random_file_paths = [self.panel_image_file_paths[random.randint(0, len(self.panel_image_file_paths) - 1)] for _ in range(num_panel_images)]
-        panel_images = _load_images_for_file_paths(random_file_paths, self.display.size())
+        panel_images = _load_images_for_file_paths(random_file_paths, self.display.panel_size())
         
         display_images = [display_image_from_panel_images(panel_images[i:i+4]) for i in range(0, len(panel_images), 4)]
 
@@ -175,12 +177,12 @@ class ApeFestSlotMachine(BaseAnimation):
         if win:
             winning_panel_image_file_path = _select_random_image_files_from_directory(_PANEL_IMAGE_DIRECTORY_PATH, 1)[0]
             winning_panel_image_background_color = (127, 0, 0, 255)
-            winning_panel_image = load_image(winning_panel_image_file_path, self.display.size(), winning_panel_image_background_color )
+            winning_panel_image = load_image(winning_panel_image_file_path, self.display.panel_size(), winning_panel_image_background_color )
             display_image = display_image_from_panel_images([winning_panel_image for _ in range(self.display.num_panels)])
 
             alternate_winning_panel_image = ImageOps.invert(winning_panel_image)
             alternate_winning_panel_image_background_color = (0, 0, 127, 255)
-            alternate_winning_panel_image = load_image(winning_panel_image_file_path, self.display.size(), alternate_winning_panel_image_background_color )
+            alternate_winning_panel_image = load_image(winning_panel_image_file_path, self.display.panel_size(), alternate_winning_panel_image_background_color )
             alternate_winning_display_image = display_image_from_panel_images([alternate_winning_panel_image for _ in range(self.display.num_panels)])
 
             self.display.setImage(display_image, x_offset=0, y_offset=0)
