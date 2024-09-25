@@ -86,8 +86,6 @@ class ApeFestSlotMachine(BaseAnimation):
         self.use_printer = os.path.exists(_USE_PRINTER_FLAG_FILE_PATH)
 
     def _is_winning_turn(self) -> bool:
-        return False # DEBUG: always return false
-    
         win_probability = _STARTING_WIN_PROBABILITY
         max_win_probability = 0.75
         win_probability_double_seconds = 60
