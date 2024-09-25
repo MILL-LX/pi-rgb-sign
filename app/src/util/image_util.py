@@ -24,8 +24,8 @@ def load_image(image_file_path: str, image_size: tuple[int, int] = None, backgro
     try:
         image = Image.open(image_file_path).convert("RGBA")
         if image.mode == 'RGBA':
-            red_background = Image.new("RGBA", image.size, background_color)
-            image = Image.alpha_composite(red_background, image)
+            background = Image.new("RGBA", image.size, background_color)
+            image = Image.alpha_composite(background, image)
 
         image = image.convert('RGB')
 
