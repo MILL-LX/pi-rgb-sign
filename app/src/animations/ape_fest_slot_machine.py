@@ -88,7 +88,7 @@ class ApeFestSlotMachine(BaseAnimation):
     def _is_winning_turn(self) -> bool:
         win_probability = _STARTING_WIN_PROBABILITY
         max_win_probability = 0.75
-        win_probability_double_seconds = 120
+        win_probability_double_seconds = 60
 
         # double the win probability every win_probability_double_seconds since the last win, up to max_win_probability
         time_since_last_win = time.time() - self.last_win_time  
