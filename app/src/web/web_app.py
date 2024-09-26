@@ -46,7 +46,10 @@ class WebApp:
         if not animation:
             return web.json_response(status=404, data={'status': 'error', 'message': f'Animation {animation_name} not found'})
 
-        asyncio.create_task(animation.run(**request.query))
+        if animation.busy:
+            return web.json_response(status=400, data={'status': 'error', 'message': f'Animation {animation_name} is already running'})
+
+        asyncio.create_task(animation.run_exclusively(**request.query))
 
         return web.json_response(status=200, data={'status': 'success', 'message': f'Animation {animation_name} queued successfully'})
         

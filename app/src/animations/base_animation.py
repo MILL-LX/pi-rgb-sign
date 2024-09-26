@@ -22,5 +22,12 @@ class BaseAnimation:
         self.emoji_font_path = emoji_font_path
         self.display_image_generator = DisplayImageGenerator(self.display, self.word_font_path, self.emoji_font_path)
 
-    def run(self):
+        self.busy = False
+
+    async def run_exclusively(self):
+        self.busy = True
+        await self.run()
+        self.busy = False
+
+    async def run(self):
         raise NotImplementedError("Subclasses must implement 'run' method")
