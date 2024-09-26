@@ -194,7 +194,7 @@ class ApeFestSlotMachine(BaseAnimation):
         else:
             prize_image_file_path = _select_random_image_files_from_directory(_LOSING_TICKET_IMAGES_DIRECTORY_PATH, 1)[0]
             self._show_losing_panel_animation()
+            
+        self._show_logo_images(display_image)
 
         print_file(prize_image_file_path, self.use_printer)
-
-        self._show_logo_images(display_image)
