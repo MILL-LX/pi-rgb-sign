@@ -5,7 +5,7 @@ import os
 
 from PIL import Image, ImageOps
 
-from animations.base_animation import BaseAnimation
+from animations.animation import Animation
 from display import Display
 from util.image_util import load_image, display_image_from_panel_images, load_animation_from_file
 from util.pi_util import is_raspberry_pi
@@ -62,7 +62,7 @@ def _load_images_from_directory(directory_path: str, image_size: tuple[int, int]
     image_file_paths = _image_file_paths_from_directory(directory_path)
     return _load_images_for_file_paths(image_file_paths, image_size)   
 
-class ApeFestSlotMachine(BaseAnimation):
+class ApeFestSlotMachine(Animation):
     def __init__(self, display: Display) -> None:
         super().__init__(display)
 
