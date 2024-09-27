@@ -2,7 +2,7 @@ import logging
 import random
 import time
 
-from animations.base_animation import BaseAnimation
+from app.src.animations.animation import Animation
 from display import Display
 import util.emoji
 import util.words
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 _HAPPY_WORDS_PATH = 'data/slot-machine/happy_words.txt'
 _WINNING_WORDS_PATH = 'data/slot-machine/winning_words.txt'
 
-class SlotMachine(BaseAnimation):
+class SlotMachine(Animation):
     def __init__(self, display: Display) -> None:
         super().__init__(display)
 

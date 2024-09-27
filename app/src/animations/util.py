@@ -3,7 +3,7 @@ import inspect
 import logging
 import os
 
-from animations.base_animation import BaseAnimation
+from app.src.animations.animation import Animation
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ def register_animations(animation_dir, display):
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
             for name, obj in module.__dict__.items():
-                if isinstance(obj, type) and issubclass(obj, BaseAnimation) and obj is not BaseAnimation:
+                if isinstance(obj, type) and issubclass(obj, Animation) and obj is not Animation:
                     animations[name] = obj(display)
     logger.info(f'Registered animations: {", ".join(animations.keys())}')
     return animations

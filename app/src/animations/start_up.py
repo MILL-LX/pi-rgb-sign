@@ -1,14 +1,14 @@
 import logging
 import time
 
-from animations.base_animation import BaseAnimation
+from app.src.animations.animation import Animation
 from util.image_util import test_panel_images_for_display, display_image_from_panel_images
 from util import pi_util
 
 
 logger =  logging.getLogger(__name__)
 
-class Startup(BaseAnimation):
+class Startup(Animation):
     def __init__(self, display) -> None:
         super().__init__(display)
 

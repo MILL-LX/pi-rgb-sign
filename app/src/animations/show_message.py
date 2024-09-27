@@ -1,14 +1,14 @@
 import logging
 import time
 
-from animations.base_animation import BaseAnimation
+from app.src.animations.animation import Animation
 from display import Display
 from display_image_generator import grapheme_string_prefix
 
 logger = logging.getLogger(__name__)
 
 
-class ShowMessage(BaseAnimation):
+class ShowMessage(Animation):
     def __init__(self, display: Display) -> None:
         super().__init__(display)
 

@@ -2,6 +2,7 @@ import asyncio
 
 from aiohttp import web
 
+from app.src.animations.animation import AnimationStatus
 from animations.util import describe_animation
 
 class WebApp:
@@ -46,12 +47,11 @@ class WebApp:
         if not animation:
             return web.json_response(status=404, data={'status': 'error', 'message': f'Animation {animation_name} not found'})
 
-        if animation.busy:
-            return web.json_response(status=400, data={'status': 'error', 'message': f'Animation {animation_name} is already running'})
-
-        asyncio.create_task(animation.run_exclusively(**request.query))
-
-        return web.json_response(status=200, data={'status': 'success', 'message': f'Animation {animation_name} queued successfully'})
+        animation_status = await animation.run_exclusively()
+        if animation_status == AnimationStatus.CANNOT_RUN_NOW:
+            return web.json_response(status=423, data={'status': 'error', 'message': f'Animation {animation_name} cannot run now'})
+        else:
+            return web.json_response(status=200, data={'status': 'success', 'message': f'Animation {animation_name} completed successfully'})
         
     def add_routes(self):
         self.app.router.add_get('/', self.index)
