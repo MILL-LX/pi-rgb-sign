@@ -69,4 +69,3 @@ class SlotMachine(Animation):
                 time.sleep(flash_delay)
                 self.display.setImage(final_display_image, x_offset=0, y_offset=0)
                 time.sleep(flash_delay)
-
