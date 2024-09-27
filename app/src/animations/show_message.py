@@ -1,7 +1,7 @@
 import logging
 import time
 
-from app.src.animations.animation import Animation
+from animations.animation import Animation
 from display import Display
 from display_image_generator import grapheme_string_prefix
 

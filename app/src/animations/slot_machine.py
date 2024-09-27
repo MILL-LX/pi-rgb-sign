@@ -2,7 +2,7 @@ import logging
 import random
 import time
 
-from app.src.animations.animation import Animation
+from animations.animation import Animation
 from display import Display
 import util.emoji
 import util.words

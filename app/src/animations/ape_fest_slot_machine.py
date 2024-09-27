@@ -5,7 +5,7 @@ import os
 
 from PIL import Image, ImageOps
 
-from app.src.animations.animation import Animation
+from animations.animation import Animation
 from display import Display
 from util.image_util import load_image, display_image_from_panel_images, load_animation_from_file
 from util.pi_util import is_raspberry_pi

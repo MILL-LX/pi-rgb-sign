@@ -2,8 +2,7 @@ import asyncio
 
 from aiohttp import web
 
-from app.src.animations.animation import AnimationStatus
-from animations.util import describe_animation
+from animations.animation import AnimationStatus
 
 class WebApp:
     def __init__(self, animations, host='0.0.0.0', port=80) -> None:

@@ -1,7 +1,7 @@
 import logging
 import time
 
-from app.src.animations.animation import Animation
+from animations.animation import Animation
 from util.image_util import test_panel_images_for_display, display_image_from_panel_images
 from util import pi_util
 

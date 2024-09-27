@@ -3,7 +3,7 @@ import inspect
 import logging
 import os
 
-from app.src.animations.animation import Animation
+from animations.animation import Animation
 
 logger = logging.getLogger(__name__)
 
