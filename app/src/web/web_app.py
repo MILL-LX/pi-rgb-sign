@@ -11,8 +11,6 @@ class WebApp:
         self.app = web.Application()
         self.add_routes()
 
-        self.running_animation = None
-
     def descriptions_for_animations(self, url_prefix):
         # endpoint_signatures = [describe_animation(animation) for animation in self.animations]
         urls = [f'{url_prefix}/animate/{animation.__class__.__name__}?arguments' for animation in self.animations.values()]
@@ -48,7 +46,7 @@ class WebApp:
         
         await animation.run(**request.query)
         return web.json_response(status=200, data={'status': 'success', 'message': f'Animation {animation_name} completed successfully'})
-        
+
     def add_routes(self):
         self.app.router.add_get('/', self.index)
         self.app.router.add_get('/animate/{animation}', self.trigger)
