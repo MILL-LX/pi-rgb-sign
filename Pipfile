@@ -6,11 +6,11 @@ name = "pypi"
 [packages]
 pillow = "*"
 brotli = "*"
-aiohttp = "*"
 aiodns = "*"
 uniseg = "*"
 emoji = "*"
 pycups = "*"
+flask = "*"
 
 [dev-packages]
 rgbmatrixemulator = "*"
