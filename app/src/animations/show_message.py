@@ -36,6 +36,3 @@ class ShowMessage(Animation):
             time.sleep(flash_delay)
             self.display.setImage(finish_image, x_offset=0, y_offset=0)
             time.sleep(flash_delay)
-
-
-

@@ -23,9 +23,8 @@ def print_file(file_path, use_printer=False):
         try:
             print_options = {}
 
-            # TODO: Rotation can be tried using print options below
-            # valid values are 4, 5, 6
-            # print_options = {'orientation-requested':'4'}
+            # Options are now part of the default config on the CUPS server
+            # print_options = {'orientation-requested':'6'} #rotate 90 degrees counter clockwise, prints small
 
             print_job_id = _printer_connection.printFile(_printer_name, file_path, 'Print Job', print_options)
         except Exception as e:
