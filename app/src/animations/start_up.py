@@ -12,7 +12,7 @@ class Startup(Animation):
     def __init__(self, display) -> None:
         super().__init__(display)
 
-    async def run(self, seconds:int=0, check_network:bool=False, **kwargs):
+    def run(self, seconds:int=0, check_network:bool=False, **kwargs):
         panel_images = test_panel_images_for_display(self.display)
 
         logger.info(f'Running startup animation for {seconds} seconds, check_network={check_network}')
