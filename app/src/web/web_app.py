@@ -36,15 +36,15 @@ class WebApp:
         return render_template_string(response)
     
     def run_animation(self, animation, args):
-        with self.lock:
-            animation.run(**args)
+        animation.run(**args)
+        self.lock.release()
 
     def animate(self, animation_name):
         animation = self.animations.get(animation_name)
         if not animation:
             return jsonify(status='error', message=f'Animation {animation_name} not found'), 404
 
-        if self.lock.locked():
+        if not self.lock.acquire(blocking=False):
             return jsonify(status='error', message='Another animation is currently running. Please try again later.'), 429
 
         request_args = request.args.to_dict()
@@ -53,7 +53,7 @@ class WebApp:
 
     def add_routes(self):
         self.app.add_url_rule('/', 'index', self.index)
-        self.app.add_url_rule('/animate/<animation_name>', 'trigger', self.animate)
+        self.app.add_url_rule('/animate/<animation_name>', 'animate', self.animate)
 
     def run(self):
         self.app.run(host=self.host, port=self.port)
