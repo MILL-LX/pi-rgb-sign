@@ -45,7 +45,7 @@ def main():
     if args.test_display: 
         startup_animation.run()
     elif args.smart_sign:
-        asyncio.run(startup_animation.run(seconds=10, check_network=True))
+        startup_animation.run(seconds=10, check_network=True)
         web_app = WebApp(animations)
         web_app.run()
     else:

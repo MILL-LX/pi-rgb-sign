@@ -12,7 +12,7 @@ class ShowMessage(Animation):
     def __init__(self, display: Display) -> None:
         super().__init__(display)
 
-    async def run(self, message: str, finish: str=None, **kwargs):
+    def run(self, message: str, finish: str=None, **kwargs):
         finish = grapheme_string_prefix(message, 4) if not finish else finish
 
         self.display.clear()

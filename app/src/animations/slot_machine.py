@@ -35,7 +35,7 @@ class SlotMachine(Animation):
 
         return display_images
 
-    async def run(self, iterations: int=20, always_draw_emoji: bool=False, **kwargs):
+    def run(self, iterations: int=20, always_draw_emoji: bool=False, **kwargs):
         self.display.clear()
 
         always_draw_emoji = isinstance(always_draw_emoji, str) and 'true' == always_draw_emoji.lower()

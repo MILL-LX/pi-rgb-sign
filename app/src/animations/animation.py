@@ -22,5 +22,5 @@ class Animation:
         self.emoji_font_path = emoji_font_path
         self.display_image_generator = DisplayImageGenerator(self.display, self.word_font_path, self.emoji_font_path)
 
-    async def run(self, **kwargs):
+    def run(self, **kwargs):
         raise NotImplementedError("Subclasses must implement 'run' method")
