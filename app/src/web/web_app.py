@@ -1,3 +1,4 @@
+import threading
 from flask import Flask, request, jsonify, render_template_string
 
 class WebApp:
@@ -5,6 +6,7 @@ class WebApp:
         self.animations = animations
         self.host = host
         self.port = port
+        self.lock = threading.Lock()  # Add a lock to manage execution state
 
         self.app = Flask(__name__)
         self.add_routes()
@@ -32,19 +34,26 @@ class WebApp:
 </html>
 '''
         return render_template_string(response)
+    
+    def run_animation(self, animation, args):
+        with self.lock:
+            animation.run(**args)
 
-    def trigger(self, animation_name):
+    def animate(self, animation_name):
         animation = self.animations.get(animation_name)
         if not animation:
             return jsonify(status='error', message=f'Animation {animation_name} not found'), 404
-        
-        # Run the animation with the provided arguments
-        animation.run(**request.args)
-        return jsonify(status='success', message=f'Animation {animation_name} completed successfully')
+
+        if self.lock.locked():
+            return jsonify(status='error', message='Another animation is currently running. Please try again later.'), 429
+
+        request_args = request.args.to_dict()
+        threading.Thread(target=self.run_animation, args=(animation, request_args)).start()
+        return jsonify(status='success', message=f'Animation {animation_name} started successfully')
 
     def add_routes(self):
         self.app.add_url_rule('/', 'index', self.index)
-        self.app.add_url_rule('/animate/<animation_name>', 'trigger', self.trigger)
+        self.app.add_url_rule('/animate/<animation_name>', 'trigger', self.animate)
 
     def run(self):
         self.app.run(host=self.host, port=self.port)
