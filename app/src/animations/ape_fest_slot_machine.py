@@ -2,6 +2,7 @@ import logging
 import random
 import time
 import os
+import sys
 
 from PIL import Image, ImageOps
 
@@ -89,17 +90,18 @@ class ApeFestSlotMachine(Animation):
         win_probability = _STARTING_WIN_PROBABILITY
         max_win_probability = 0.75
         win_probability_double_seconds = 90
+        max_probability_doubling_exponent = 4
 
         # double the win probability every win_probability_double_seconds since the last win, up to max_win_probability
-        time_since_last_win = time.time() - self.last_win_time  
-        win_probability *= 2 ** int(time_since_last_win / win_probability_double_seconds) # 60 seconds = 1 minute
-        win_probability = min(win_probability, max_win_probability) # cap at max_win_probability
+        seconds_since_last_win = sys.float_info.max #min(sys.float_info.max, time.time() - self.last_win_time)
+        probability_doubling_exponent = min(max_probability_doubling_exponent, int(seconds_since_last_win / win_probability_double_seconds))
+        win_probability *= 2 ** probability_doubling_exponent
+        capped_win_probability = min(win_probability, max_win_probability) # cap at max_win_probability
 
-        win = random.random() < win_probability
+        win = random.random() < capped_win_probability
 
         if win:
             self.last_win_time = time.time()
-            win_probability = _STARTING_WIN_PROBABILITY
 
         return win
 
