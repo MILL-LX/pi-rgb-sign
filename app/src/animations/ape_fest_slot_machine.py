@@ -151,7 +151,7 @@ class ApeFestSlotMachine(Animation):
 
         self.display.setImage(display_image, x_offset=0, y_offset=0)
 
-    async def run(self, **kwargs):
+    def run(self, **kwargs):
         self.display.clear()
 
         # have enough display images to fill the game display time if we display each image for the panel display time
