@@ -36,8 +36,15 @@ class WebApp:
         return render_template_string(response)
     
     def run_animation(self, animation, args):
-        animation.run(**args)
-        self.lock.release()
+        try:
+            animation.run(**args)
+        except Exception as e:
+            # Log the error so you know what went wrong
+            print(f"Animation crashed: {e}")
+            # Optionally: import traceback; traceback.print_exc()
+        finally:
+            # This ALWAYS executes, even if animation.run() crashes
+            self.lock.release()
 
     def animate(self, animation_name):
         animation = self.animations.get(animation_name)
